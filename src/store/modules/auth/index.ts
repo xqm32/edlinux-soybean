@@ -3,16 +3,17 @@ import { defineStore } from 'pinia';
 import { useLoading } from '@sa/hooks';
 import { SetupStoreId } from '@/enum';
 import { useRouterPush } from '@/hooks/common/router';
-import { fetchGetUserInfo, fetchLogin } from '@/service/api';
 import { localStg } from '@/utils/storage';
 import { $t } from '@/locales';
 import { useRouteStore } from '../route';
+import { usePocketBase } from '../pb';
 import { clearAuthStorage, getToken, getUserInfo } from './shared';
 
 export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const routeStore = useRouteStore();
   const { route, toLogin, redirectFromLogin } = useRouterPush(false);
   const { loading: loginLoading, startLoading, endLoading } = useLoading();
+  const pb = usePocketBase();
 
   const token = ref(getToken());
 
@@ -53,25 +54,29 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   async function login(userName: string, password: string, redirect = true) {
     startLoading();
 
-    const { data: loginToken, error } = await fetchLogin(userName, password);
+    let error = false;
+    try {
+      await pb.collection('users').authWithPassword(userName, password);
+    } catch (e: any) {
+      window.$message?.error?.('用户名或密码错误');
+      error = true;
+    }
 
     if (!error) {
-      const pass = await loginByToken(loginToken);
+      await logging();
 
-      if (pass) {
-        await routeStore.initAuthRoute();
+      await routeStore.initAuthRoute();
 
-        if (redirect) {
-          await redirectFromLogin();
-        }
+      if (redirect) {
+        await redirectFromLogin();
+      }
 
-        if (routeStore.isInitAuthRoute) {
-          window.$notification?.success({
-            title: $t('page.login.common.loginSuccess'),
-            content: $t('page.login.common.welcomeBack', { userName: userInfo.userName }),
-            duration: 4500
-          });
-        }
+      if (routeStore.isInitAuthRoute) {
+        window.$notification?.success({
+          title: $t('page.login.common.loginSuccess'),
+          content: $t('page.login.common.welcomeBack', { userName: userInfo.userName }),
+          duration: 4500
+        });
       }
     } else {
       resetStore();
@@ -80,25 +85,25 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     endLoading();
   }
 
-  async function loginByToken(loginToken: Api.Auth.LoginToken) {
+  async function logging() {
     // 1. stored in the localStorage, the later requests need it in headers
-    localStg.set('token', loginToken.token);
-    localStg.set('refreshToken', loginToken.refreshToken);
+    localStg.set('token', 'iamatoken');
+    localStg.set('refreshToken', 'iamarefreshtoken');
 
-    const { data: info, error } = await fetchGetUserInfo();
+    const model = pb.authStore.model!;
+    const info: Api.Auth.UserInfo = {
+      userId: model.id,
+      userName: model.name,
+      roles: [model.role],
+      buttons: []
+    };
 
-    if (!error) {
-      // 2. store user info
-      localStg.set('userInfo', info);
+    // 2. store user info
+    localStg.set('userInfo', info);
 
-      // 3. update store
-      token.value = loginToken.token;
-      Object.assign(userInfo, info);
-
-      return true;
-    }
-
-    return false;
+    // 3. update store
+    token.value = 'iamatoken';
+    Object.assign(userInfo, info);
   }
 
   return {
