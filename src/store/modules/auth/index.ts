@@ -94,7 +94,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     const info: Api.Auth.UserInfo = {
       userId: model.id,
       userName: model.name,
-      roles: [model.role],
+      roles: model.roles,
       buttons: []
     };
 
