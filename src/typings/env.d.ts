@@ -101,5 +101,7 @@ declare namespace Env {
      * @link https://docs.iconify.design/api/providers.html
      */
     readonly VITE_ICONIFY_URL?: string;
+    /** PocketBase url */
+    readonly VITE_POCKET_BASE_URL: string;
   }
 }
