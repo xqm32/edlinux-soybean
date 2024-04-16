@@ -25,6 +25,8 @@ declare module "@elegant-router/types" {
     "404": "/404";
     "500": "/500";
     "about": "/about";
+    "course": "/course/:id";
+    "courses": "/courses";
     "function": "/function";
     "function_hide-child": "/function/hide-child";
     "function_hide-child_one": "/function/hide-child/one";
@@ -36,6 +38,7 @@ declare module "@elegant-router/types" {
     "function_tab": "/function/tab";
     "function_toggle-auth": "/function/toggle-auth";
     "home": "/home";
+    "learn": "/learn";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "manage": "/manage";
     "manage_menu": "/manage/menu";
@@ -48,6 +51,7 @@ declare module "@elegant-router/types" {
     "multi-menu_second": "/multi-menu/second";
     "multi-menu_second_child": "/multi-menu/second/child";
     "multi-menu_second_child_home": "/multi-menu/second/child/home";
+    "teach": "/teach";
     "user-center": "/user-center";
   };
 
@@ -88,11 +92,15 @@ declare module "@elegant-router/types" {
     | "404"
     | "500"
     | "about"
+    | "course"
+    | "courses"
     | "function"
     | "home"
+    | "learn"
     | "login"
     | "manage"
     | "multi-menu"
+    | "teach"
     | "user-center"
   >;
 
@@ -116,6 +124,8 @@ declare module "@elegant-router/types" {
     | "500"
     | "login"
     | "about"
+    | "course"
+    | "courses"
     | "function_hide-child_one"
     | "function_hide-child_three"
     | "function_hide-child_two"
@@ -125,12 +135,14 @@ declare module "@elegant-router/types" {
     | "function_tab"
     | "function_toggle-auth"
     | "home"
+    | "learn"
     | "manage_menu"
     | "manage_role"
     | "manage_user-detail"
     | "manage_user"
     | "multi-menu_first_child"
     | "multi-menu_second_child_home"
+    | "teach"
     | "user-center"
   >;
 

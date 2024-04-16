@@ -51,6 +51,28 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'course',
+    path: '/course/:id',
+    component: 'layout.base$view.course',
+    props: true,
+    meta: {
+      title: 'course',
+      hideInMenu: true,
+      i18nKey: 'route.course'
+    }
+  },
+  {
+    name: 'courses',
+    path: '/courses',
+    component: 'layout.base$view.courses',
+    meta: {
+      title: 'courses',
+      icon: 'fluent:book-information-24-regular',
+      i18nKey: 'route.courses',
+      order: 3
+    }
+  },
+  {
     name: 'function',
     path: '/function',
     component: 'layout.base',
@@ -58,7 +80,8 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'function',
       i18nKey: 'route.function',
       icon: 'icon-park-outline:all-application',
-      order: 6
+      order: 6,
+      roles: ['R_ADMIN']
     },
     children: [
       {
@@ -180,6 +203,17 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'learn',
+    path: '/learn',
+    component: 'layout.base$view.learn',
+    meta: {
+      title: 'learn',
+      i18nKey: 'route.learn',
+      icon: 'mdi:book-open-variant',
+      order: 2
+    }
+  },
+  {
     name: 'login',
     path: '/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?',
     component: 'layout.blank$view.login',
@@ -262,7 +296,8 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'multi-menu',
       i18nKey: 'route.multi-menu',
-      order: 8
+      order: 8,
+      roles: ['R_ADMIN']
     },
     children: [
       {
@@ -316,6 +351,17 @@ export const generatedRoutes: GeneratedRoute[] = [
         ]
       }
     ]
+  },
+  {
+    name: 'teach',
+    path: '/teach',
+    component: 'layout.base$view.teach',
+    meta: {
+      title: 'teach',
+      i18nKey: 'route.teach',
+      icon: 'fluent:people-team-24-regular',
+      order: 2
+    }
   },
   {
     name: 'user-center',

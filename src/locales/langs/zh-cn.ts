@@ -133,6 +133,10 @@ const local: App.I18n.Schema = {
     }
   },
   route: {
+    teach: '我的教学',
+    learn: '我的课程',
+    course: '课程',
+    courses: '所有课程',
     login: '登录',
     403: '无权限',
     404: '页面不存在',
