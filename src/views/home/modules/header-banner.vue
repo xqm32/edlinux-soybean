@@ -2,14 +2,14 @@
 import { computed } from 'vue';
 import { $t } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
-import { useAuthStore } from '@/store/modules/auth';
+import { usePocketBase } from '@/store/modules/pb';
 
 defineOptions({
   name: 'HeaderBanner'
 });
 
 const appStore = useAppStore();
-const authStore = useAuthStore();
+const model = usePocketBase().authStore.model!;
 
 const gap = computed(() => (appStore.isMobile ? 0 : 16));
 
@@ -47,9 +47,7 @@ const statisticData = computed<StatisticData[]>(() => [
             <img src="@/assets/imgs/soybean.jpg" class="size-full" />
           </div>
           <div class="pl-12px">
-            <h3 class="text-18px font-semibold">
-              {{ $t('page.home.greeting', { userName: authStore.userInfo.userName }) }}
-            </h3>
+            <h3 class="text-18px font-semibold">你好，{{ model.name }}！</h3>
             <p class="text-#999 leading-30px">{{ $t('page.home.weatherDesc') }}</p>
           </div>
         </div>
