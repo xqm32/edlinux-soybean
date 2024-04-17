@@ -151,6 +151,7 @@ const routeMap: RouteMap = {
   "404": "/404",
   "500": "/500",
   "about": "/about",
+  "course": "/course/:id",
   "courses": "/courses",
   "function": "/function",
   "function_hide-child": "/function/hide-child",
@@ -163,7 +164,7 @@ const routeMap: RouteMap = {
   "function_tab": "/function/tab",
   "function_toggle-auth": "/function/toggle-auth",
   "home": "/home",
-  "learn": "/learn/:id",
+  "learn": "/learn",
   "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?",
   "manage": "/manage",
   "manage_menu": "/manage/menu",
@@ -176,6 +177,7 @@ const routeMap: RouteMap = {
   "multi-menu_second": "/multi-menu/second",
   "multi-menu_second_child": "/multi-menu/second/child",
   "multi-menu_second_child_home": "/multi-menu/second/child/home",
+  "teach": "/teach",
   "user-center": "/user-center"
 };
 
