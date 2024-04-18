@@ -38,6 +38,7 @@ declare module "@elegant-router/types" {
     "function_tab": "/function/tab";
     "function_toggle-auth": "/function/toggle-auth";
     "home": "/home";
+    "lab": "/lab";
     "learn": "/learn";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "manage": "/manage";
@@ -96,6 +97,7 @@ declare module "@elegant-router/types" {
     | "courses"
     | "function"
     | "home"
+    | "lab"
     | "learn"
     | "login"
     | "manage"
@@ -135,6 +137,7 @@ declare module "@elegant-router/types" {
     | "function_tab"
     | "function_toggle-auth"
     | "home"
+    | "lab"
     | "learn"
     | "manage_menu"
     | "manage_role"

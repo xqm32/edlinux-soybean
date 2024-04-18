@@ -203,6 +203,17 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'lab',
+    path: '/lab',
+    component: 'layout.base$view.lab',
+    meta: {
+      title: 'lab',
+      i18nKey: 'route.lab',
+      icon: 'mdi:flask-outline',
+      order: 4
+    }
+  },
+  {
     name: 'learn',
     path: '/learn',
     component: 'layout.base$view.learn',

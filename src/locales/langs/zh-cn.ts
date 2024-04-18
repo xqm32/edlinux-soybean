@@ -133,6 +133,7 @@ const local: App.I18n.Schema = {
     }
   },
   route: {
+    lab: '实验室',
     teach: '我的教学',
     learn: '我的课程',
     course: '课程',

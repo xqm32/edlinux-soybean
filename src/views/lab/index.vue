@@ -1,0 +1,7 @@
+<script setup lang="ts"></script>
+
+<template>
+  <div>lab</div>
+</template>
+
+<style scoped></style>
