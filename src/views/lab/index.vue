@@ -13,10 +13,10 @@ const handleMount = (editor: any) => (editorRef.value = editor);
 </script>
 
 <template>
-  <NSplit direction="horizontal">
+  <NSplit direction="horizontal" :default-size="0.25">
     <template #1>
       <NCard class="h-full" size="small" :bordered="false">
-        <NCode />
+        <NInput class="h-full" type="textarea" :bordered="false" placeholder="这里可以做一些笔记..." />
       </NCard>
     </template>
     <template #2>
@@ -28,9 +28,15 @@ const handleMount = (editor: any) => (editorRef.value = editor);
         </template>
         <template #2>
           <NCard class="h-full" size="small" :bordered="false">
-            <NTabs animated>
-              <NTabPane name="测试用例"><NCode /></NTabPane>
-              <NTabPane name="测试结果"><NCode /></NTabPane>
+            <NTabs class="h-full" animated>
+              <NTabPane name="测试用例" size="small">
+                <NInput type="textarea" />
+                <NFlex justify="center" class="mt-1 w-full">
+                  <NButton type="default">重置</NButton>
+                  <NButton type="primary">运行</NButton>
+                </NFlex>
+              </NTabPane>
+              <NTabPane name="测试结果" size="small"><NCode /></NTabPane>
             </NTabs>
           </NCard>
         </template>
@@ -38,5 +44,3 @@ const handleMount = (editor: any) => (editorRef.value = editor);
     </template>
   </NSplit>
 </template>
-
-<style scoped></style>
