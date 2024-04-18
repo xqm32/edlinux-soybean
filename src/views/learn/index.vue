@@ -16,8 +16,12 @@ onMounted(async () => {
 
 <template>
   <div>
-    <NCard v-for="course in courses" :key="course.expand.courseId.id">
-      <NButton @click="routerPush(`/course/${course.expand.courseId.id}`)">{{ course.expand.courseId.name }}</NButton>
-    </NCard>
+    <NGrid x-gap="12" :cols="4">
+      <NGridItem v-for="course in courses" :key="course.expand.courseId.id">
+        <NCard :title="course.expand.courseId.name">
+          <NButton @click="routerPush(`/course/${course.expand.courseId.id}`)">进入课程</NButton>
+        </NCard>
+      </NGridItem>
+    </NGrid>
   </div>
 </template>
