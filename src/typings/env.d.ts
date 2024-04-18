@@ -103,5 +103,7 @@ declare namespace Env {
     readonly VITE_ICONIFY_URL?: string;
     /** PocketBase url */
     readonly VITE_POCKET_BASE_URL: string;
+    /** Compiler url */
+    readonly VITE_COMPILER_URL: string;
   }
 }
