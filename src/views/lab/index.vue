@@ -7,7 +7,7 @@ const MONACO_EDITOR_OPTIONS = {
   formatOnPaste: true
 };
 
-const code = ref('// some code...');
+const code = ref('');
 const editorRef = shallowRef();
 const handleMount = (editor: any) => (editorRef.value = editor);
 </script>
@@ -20,7 +20,7 @@ const handleMount = (editor: any) => (editorRef.value = editor);
       </NCard>
     </template>
     <template #2>
-      <NSplit direction="vertical" :default-size="0.8">
+      <NSplit direction="vertical" :default-size="0.75">
         <template #1>
           <NCard class="h-full" size="small" :bordered="false">
             <VueMonacoEditor v-model:value="code" :options="MONACO_EDITOR_OPTIONS" @mount="handleMount" />

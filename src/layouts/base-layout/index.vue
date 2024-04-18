@@ -119,9 +119,6 @@ setupMixMenuContext();
     </template>
     <GlobalContent />
     <ThemeDrawer />
-    <template #footer>
-      <GlobalFooter />
-    </template>
   </AdminLayout>
 </template>
 
