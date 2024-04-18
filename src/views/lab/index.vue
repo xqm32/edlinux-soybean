@@ -82,6 +82,9 @@ async function run() {
                   <NTag type="success">{{ result?.message }}</NTag>
                   <NCode v-if="result?.outputs.join()" :code="result?.outputs.join()" class="border rd p-1" />
                 </NFlex>
+                <NFlex v-else vertical>
+                  <NTag type="warning">暂无结果</NTag>
+                </NFlex>
               </NTabPane>
             </NTabs>
           </NCard>
