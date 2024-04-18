@@ -9,12 +9,7 @@ const MONACO_EDITOR_OPTIONS = {
 
 const code = ref('// some code...');
 const editorRef = shallowRef();
-const handleMount = editor => (editorRef.value = editor);
-
-// your action
-function formatCode() {
-  editorRef.value?.getAction('editor.action.formatDocument').run();
-}
+const handleMount = (editor: any) => (editorRef.value = editor);
 </script>
 
 <template>
