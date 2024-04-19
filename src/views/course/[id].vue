@@ -18,9 +18,14 @@ onMounted(async () => {
 <template>
   <div>
     <NCard v-if="course" :title="course.name">
-      {{ course.description }}
-      <NDivider />
-      <NFlex v-for="chapter in chapters" :key="chapter.id">{{ chapter.name }}</NFlex>
+      <template #header-extra>
+        {{ course.description }}
+      </template>
+      <NList bordered>
+        <NListItem v-for="chapter in chapters" :key="chapter.id">
+          <NThing :title="chapter.name"></NThing>
+        </NListItem>
+      </NList>
     </NCard>
   </div>
 </template>
