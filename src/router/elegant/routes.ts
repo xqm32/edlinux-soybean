@@ -78,7 +78,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     component: 'layout.base$view.courses',
     meta: {
       title: 'courses',
-      icon: 'fluent:book-information-24-regular',
+      icon: 'mdi:library-shelves',
       i18nKey: 'route.courses',
       order: 3
     }
