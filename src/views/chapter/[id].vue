@@ -13,7 +13,7 @@ const props = defineProps<{
 const pb = usePocketBase();
 
 const [attachments, exercises, chapter] = [ref(), ref(), ref()];
-const content = computed(() => pb.getFileUrl(chapter.value, chapter.value.content));
+const content = computed(() => pb.getFileUrl(chapter.value, chapter.value.content, { download: true }));
 onMounted(async () => {
   attachments.value = await pb
     .collection('attachments')
