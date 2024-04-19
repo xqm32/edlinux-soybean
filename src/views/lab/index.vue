@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, shallowRef } from 'vue';
+import { runCode } from '@/service/api';
 
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
@@ -17,23 +18,16 @@ function clear() {
 }
 
 async function run() {
-  const resp = await fetch(import.meta.env.VITE_COMPILER_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      language: language.value,
-      code: code.value,
-      cases: [
-        {
-          input: input.value
-        }
-      ]
-    })
+  result.value = await runCode({
+    language: language.value,
+    code: code.value,
+    cases: [
+      {
+        input: input.value
+      }
+    ]
   });
   tab.value = '测试结果';
-  result.value = await resp.json();
 }
 </script>
 
@@ -62,18 +56,21 @@ async function run() {
               <NTabPane name="测试用例" size="small">
                 <NInput v-model:value="input" type="textarea" />
                 <NFlex justify="center" class="mt-1 w-full">
-                  <NButton type="default" @click="clear">重置</NButton>
+                  <NButton @click="clear">重置</NButton>
                   <NButton type="primary" @click="run">运行</NButton>
                 </NFlex>
               </NTabPane>
               <NTabPane name="测试结果" size="small">
-                <NFlex v-if="result?.stderr" vertical>
+                <NFlex v-if="['CE', 'RE', 'WA'].includes(result?.code)" vertical>
                   <NTag type="error">{{ result?.message }}</NTag>
-                  <NCode :code="result?.stderr" class="border border-red rd p-1" />
+                  <NCode :code="result?.stderr" class="text-red" />
                 </NFlex>
-                <NFlex v-else-if="result?.outputs !== undefined" vertical>
+                <NFlex v-else-if="['AC'].includes(result?.code)" vertical>
                   <NTag type="success">{{ result?.message }}</NTag>
-                  <NCode v-if="result?.outputs.join()" :code="result?.outputs.join()" class="border rd p-1" />
+                </NFlex>
+                <NFlex v-else-if="['TEST'].includes(result?.code)" vertical>
+                  <NTag>{{ result?.message }}</NTag>
+                  <NCode v-if="result?.outputs.join()" :code="result?.outputs.join()" />
                 </NFlex>
                 <NEmpty v-else />
               </NTabPane>
