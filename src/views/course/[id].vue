@@ -10,6 +10,11 @@ const props = defineProps<{
 const pb = usePocketBase();
 const { routerPush } = useRouterPush();
 
+const active = ref(false);
+function activate() {
+  active.value = true;
+}
+
 const [chapters, course] = [ref(), ref()];
 onMounted(async () => {
   chapters.value = await pb.collection('chapters').getFullList({ filter: `courseId="${props.id}"`, sort: 'order' });
@@ -29,7 +34,17 @@ onMounted(async () => {
           <NButton @click="routerPush(`/chapter/${chapter.id}`)">进入章节</NButton>
         </NListItem>
         <NListItem v-if="pb.authStore.model!.roles.includes('R_TEACHER')">
-          <NButton type="primary" @click="routerPush(`/course/${course.id}/edit`)">编辑课程</NButton>
+          <NButton @click="activate">创建章节</NButton>
+          <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
+            <NDrawerContent title="创建章节">
+              <NForm>
+                <NFormItem label="章节标题">
+                  <NInput />
+                </NFormItem>
+              </NForm>
+              <NFlex justify="center"><NButton>创建</NButton></NFlex>
+            </NDrawerContent>
+          </NDrawer>
         </NListItem>
       </NList>
       <NEmpty v-else />
