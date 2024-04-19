@@ -154,6 +154,7 @@ const routeMap: RouteMap = {
   "chapter": "/chapter/:id",
   "course": "/course/:id",
   "courses": "/courses",
+  "exercise": "/exercise/:id",
   "function": "/function",
   "function_hide-child": "/function/hide-child",
   "function_hide-child_one": "/function/hide-child/one",

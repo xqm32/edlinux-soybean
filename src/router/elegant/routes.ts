@@ -90,7 +90,8 @@ export const generatedRoutes: GeneratedRoute[] = [
     props: true,
     meta: {
       title: 'exercise',
-      i18nKey: 'route.exercise'
+      i18nKey: 'route.exercise',
+      hideInMenu: true
     }
   },
   {

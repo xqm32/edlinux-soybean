@@ -14,6 +14,11 @@ onMounted(async () => {
 
 <template>
   <div v-if="courses">
+    <NCard class="mb-2">
+      <NFlex justify="center">
+        <NButton @click="routerPush('/create/course')">创建课程</NButton>
+      </NFlex>
+    </NCard>
     <NGrid v-if="courses.length > 0" x-gap="12" :cols="4">
       <NGridItem v-for="course in courses" :key="course.id">
         <NCard :title="course.name">
@@ -21,6 +26,6 @@ onMounted(async () => {
         </NCard>
       </NGridItem>
     </NGrid>
-    <NEmpty v-else />
+    <NEmpty v-else class="h-full" />
   </div>
 </template>
