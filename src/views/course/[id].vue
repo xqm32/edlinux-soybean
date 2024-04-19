@@ -6,11 +6,11 @@ import { usePocketBase } from '@/store/modules/pb';
 const props = defineProps<{
   id: string;
 }>();
+
 const pb = usePocketBase();
 const { routerPush } = useRouterPush();
 
-const course = ref();
-const chapters = ref();
+const [chapters, course] = [ref(), ref()];
 onMounted(async () => {
   chapters.value = await pb.collection('chapters').getFullList({ filter: `courseId="${props.id}"`, sort: 'order' });
   course.value = await pb.collection('courses').getOne(props.id);

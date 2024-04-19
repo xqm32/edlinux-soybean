@@ -4,22 +4,17 @@ import { marked } from 'marked';
 import { usePocketBase } from '@/store/modules/pb';
 import { useRouterPush } from '@/hooks/common/router';
 
-// Component's fields
 const props = defineProps<{
   id: string;
 }>();
 
-// Features
-const { routerPush } = useRouterPush();
 const pb = usePocketBase();
+const { routerPush } = useRouterPush();
 
-// Data
 const [attachments, exercises, chapter] = [ref(), ref(), ref()];
 const markdown = computed(() => {
   return marked(chapter.value.content);
 });
-
-// Lifecycle
 onMounted(async () => {
   attachments.value = await pb
     .collection('attachments')

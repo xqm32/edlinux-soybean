@@ -7,14 +7,7 @@ const MONACO_EDITOR_OPTIONS = {
   formatOnPaste: true
 };
 
-const language = ref('c');
-const code = ref('');
-
-const tab = ref('测试用例');
-
-const input = ref('');
-const result = ref();
-
+const [language, code, tab, input, result] = [ref('c'), ref(''), ref('测试用例'), ref(''), ref()];
 const editorRef = shallowRef();
 const handleMount = (editor: any) => (editorRef.value = editor);
 
