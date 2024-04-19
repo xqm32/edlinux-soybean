@@ -26,7 +26,10 @@ onMounted(async () => {
       <NList v-if="chapters.length > 0" bordered>
         <NListItem v-for="chapter in chapters" :key="chapter.id">
           <NThing :title="chapter.name"></NThing>
-          <NButton @click="routerPush(`/chapter/${chapter.id}`)">进入课程</NButton>
+          <NButton @click="routerPush(`/chapter/${chapter.id}`)">进入章节</NButton>
+        </NListItem>
+        <NListItem v-if="pb.authStore.model!.roles.includes('R_TEACHER')">
+          <NButton type="primary" @click="routerPush(`/course/${course.id}/edit`)">编辑课程</NButton>
         </NListItem>
       </NList>
       <NEmpty v-else />
