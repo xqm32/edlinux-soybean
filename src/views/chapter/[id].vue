@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { marked } from 'marked';
 import { usePocketBase } from '@/store/modules/pb';
 
 const props = defineProps<{
@@ -10,6 +11,9 @@ const pb = usePocketBase();
 const attachments = ref();
 const exercises = ref();
 const chapter = ref();
+const markdown = computed(() => {
+  return marked(chapter.value.content);
+});
 onMounted(async () => {
   attachments.value = await pb
     .collection('attachments')
@@ -27,6 +31,7 @@ onMounted(async () => {
       <template #header-extra>
         {{ chapter.description }}
       </template>
+      <div v-html="markdown"></div>
       <NList v-if="attachments.length > 0" bordered>
         <NListItem v-for="attachment in attachments" :key="attachment.id">
           <NThing :title="attachment.content"></NThing>
