@@ -151,6 +151,7 @@ const routeMap: RouteMap = {
   "404": "/404",
   "500": "/500",
   "about": "/about",
+  "chapter": "/chapter/:id",
   "course": "/course/:id",
   "courses": "/courses",
   "function": "/function",

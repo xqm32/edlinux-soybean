@@ -13,13 +13,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <NGrid x-gap="12" :cols="4">
+  <div v-if="courses">
+    <NGrid v-if="courses.length > 0" x-gap="12" :cols="4">
       <NGridItem v-for="course in courses" :key="course.id">
         <NCard :title="course.name">
           <NButton @click="routerPush(`/course/${course.id}`)">进入课程</NButton>
         </NCard>
       </NGridItem>
     </NGrid>
+    <NEmpty v-else />
   </div>
 </template>

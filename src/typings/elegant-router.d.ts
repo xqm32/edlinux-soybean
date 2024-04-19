@@ -25,6 +25,7 @@ declare module "@elegant-router/types" {
     "404": "/404";
     "500": "/500";
     "about": "/about";
+    "chapter": "/chapter/:id";
     "course": "/course/:id";
     "courses": "/courses";
     "function": "/function";
@@ -93,6 +94,7 @@ declare module "@elegant-router/types" {
     | "404"
     | "500"
     | "about"
+    | "chapter"
     | "course"
     | "courses"
     | "function"
@@ -126,6 +128,7 @@ declare module "@elegant-router/types" {
     | "500"
     | "login"
     | "about"
+    | "chapter"
     | "course"
     | "courses"
     | "function_hide-child_one"

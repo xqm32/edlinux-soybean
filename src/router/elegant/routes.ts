@@ -51,6 +51,17 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'chapter',
+    path: '/chapter/:id',
+    component: 'layout.base$view.chapter',
+    props: true,
+    meta: {
+      title: 'chapter',
+      i18nKey: 'route.chapter',
+      hideInMenu: true
+    }
+  },
+  {
     name: 'course',
     path: '/course/:id',
     component: 'layout.base$view.course',
