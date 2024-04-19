@@ -231,7 +231,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'learn',
       i18nKey: 'route.learn',
-      icon: 'mdi:book-open-variant',
+      icon: 'mdi:school-outline',
       order: 2
     }
   },
@@ -381,7 +381,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'teach',
       i18nKey: 'route.teach',
-      icon: 'fluent:people-team-24-regular',
+      icon: 'mdi:work-outline',
       order: 2
     }
   },
