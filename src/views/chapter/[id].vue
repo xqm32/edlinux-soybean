@@ -31,9 +31,10 @@ onMounted(async () => {
       <template #header-extra>
         {{ chapter.description }}
       </template>
-      <NCard class="h-2xl overflow-scroll">
+      <NCard v-if="chapter.content" class="h-2xl overflow-scroll">
         <VuePdfEmbed annotation-layer text-layer :source="content" />
       </NCard>
+      <NEmpty v-else />
       <NCard v-if="attachments.length > 0" size="small" title="附件" :bordered="false">
         <NList :show-divider="false">
           <NListItem>
