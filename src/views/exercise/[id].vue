@@ -5,12 +5,8 @@ import { usePocketBase } from '@/store/modules/pb';
 const props = defineProps<{
   id: string;
 }>();
-const pb = usePocketBase();
 
-const exercise = ref();
-onMounted(async () => {
-  exercise.value = await pb.collection('exercises').getOne(props.id);
-});
+const pb = usePocketBase();
 
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
@@ -18,14 +14,8 @@ const MONACO_EDITOR_OPTIONS = {
   formatOnPaste: true
 };
 
-const language = ref('c');
-const code = ref('');
-
-const tab = ref('测试用例');
-
-const input = ref('');
-const result = ref();
-
+const [language, code, tab, input, result] = [ref('c'), ref(''), ref('测试用例'), ref(''), ref()];
+const exercise = ref();
 const editorRef = shallowRef();
 const handleMount = (editor: any) => (editorRef.value = editor);
 
@@ -43,25 +33,23 @@ async function run() {
     body: JSON.stringify({
       language: language.value,
       code: code.value,
-      cases: [
-        {
-          input: input.value
-        }
-      ]
+      cases: JSON.parse(exercise.value.cases)
     })
   });
   tab.value = '测试结果';
   result.value = await resp.json();
 }
+
+onMounted(async () => {
+  exercise.value = await pb.collection('exercises').getOne(props.id);
+});
 </script>
 
 <template>
   <NSplit direction="horizontal" :default-size="0.3">
     <template #1>
-      <NCard class="h-full" size="small" :bordered="false">
-        <div v-if="exercise">
-          {{ exercise }}
-        </div>
+      <NCard v-if="exercise" class="h-full" size="small" :bordered="false">
+        {{ exercise.content }}
       </NCard>
     </template>
     <template #2>
