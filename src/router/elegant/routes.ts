@@ -84,6 +84,16 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'exercise',
+    path: '/exercise/:id',
+    component: 'layout.base$view.exercise',
+    props: true,
+    meta: {
+      title: 'exercise',
+      i18nKey: 'route.exercise'
+    }
+  },
+  {
     name: 'function',
     path: '/function',
     component: 'layout.base',

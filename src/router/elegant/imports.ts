@@ -23,6 +23,7 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   chapter: () => import("@/views/chapter/[id].vue"),
   course: () => import("@/views/course/[id].vue"),
   courses: () => import("@/views/courses/index.vue"),
+  exercise: () => import("@/views/exercise/[id].vue"),
   "function_hide-child_one": () => import("@/views/function/hide-child/one/index.vue"),
   "function_hide-child_three": () => import("@/views/function/hide-child/three/index.vue"),
   "function_hide-child_two": () => import("@/views/function/hide-child/two/index.vue"),

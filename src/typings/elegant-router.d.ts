@@ -28,6 +28,7 @@ declare module "@elegant-router/types" {
     "chapter": "/chapter/:id";
     "course": "/course/:id";
     "courses": "/courses";
+    "exercise": "/exercise/:id";
     "function": "/function";
     "function_hide-child": "/function/hide-child";
     "function_hide-child_one": "/function/hide-child/one";
@@ -97,6 +98,7 @@ declare module "@elegant-router/types" {
     | "chapter"
     | "course"
     | "courses"
+    | "exercise"
     | "function"
     | "home"
     | "lab"
@@ -131,6 +133,7 @@ declare module "@elegant-router/types" {
     | "chapter"
     | "course"
     | "courses"
+    | "exercise"
     | "function_hide-child_one"
     | "function_hide-child_three"
     | "function_hide-child_two"
