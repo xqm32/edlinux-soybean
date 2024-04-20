@@ -13,8 +13,8 @@ onMounted(async () => {
 <template>
   <div>
     <NList v-if="wikis" bordered>
-      <NListItem v-for="wiki in wikis" :key="wiki.id" vv-for="wiki in wikis">
-        <NButton tag="a" :href="wikis.content" text>{{ wiki.name }}</NButton>
+      <NListItem v-for="wiki in wikis" :key="wiki.id">
+        <NButton tag="a" :href="wiki.content" text>{{ wiki.name }}</NButton>
       </NListItem>
     </NList>
   </div>

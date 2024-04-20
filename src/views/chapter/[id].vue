@@ -12,6 +12,11 @@ const props = defineProps<{
 
 const pb = usePocketBase();
 
+const active = ref(false);
+function activate() {
+  active.value = true;
+}
+
 const [attachments, exercises, chapter] = [ref(), ref(), ref()];
 const content = computed(() => pb.getFileUrl(chapter.value, chapter.value.content, { download: true }));
 onMounted(async () => {
@@ -30,8 +35,33 @@ onMounted(async () => {
     <NCard v-if="chapter" :title="chapter.name">
       <template #header-extra>
         {{ chapter.description }}
+        <div v-if="pb.authStore.model!.roles.includes('R_TEACHER')" class="ml-2">
+          <NButton @click="activate">编辑章节</NButton>
+          <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
+            <NDrawerContent title="编辑章节">
+              <NForm>
+                <NFormItem label="章节标题"><NInput /></NFormItem>
+                <NFormItem label="章节内容">
+                  <NUpload multiple directory-dnd :max="5">
+                    <NUploadDragger>
+                      <NText>点击或者拖动文件到该区域来上传</NText>
+                    </NUploadDragger>
+                  </NUpload>
+                </NFormItem>
+                <NFormItem label="章节附件">
+                  <NUpload multiple directory-dnd :max="5">
+                    <NUploadDragger>
+                      <NText>点击或者拖动文件到该区域来上传</NText>
+                    </NUploadDragger>
+                  </NUpload>
+                </NFormItem>
+              </NForm>
+              <NFlex justify="center"><NButton>提交</NButton></NFlex>
+            </NDrawerContent>
+          </NDrawer>
+        </div>
       </template>
-      <NCard v-if="chapter.content" class="h-2xl overflow-scroll">
+      <NCard v-if="chapter.content" class="h-xl overflow-scroll" :scale="0.7">
         <VuePdfEmbed annotation-layer text-layer :source="content" />
       </NCard>
       <NEmpty v-else />
@@ -48,9 +78,13 @@ onMounted(async () => {
         </NList>
       </NCard>
       <NCard v-if="exercises.length > 0" size="small" title="习题" :bordered="false">
+        <template v-if="pb.authStore.model!.roles.includes('R_TEACHER')" #header-extra>
+          <NButton>添加习题</NButton>
+        </template>
         <NList :show-divider="false">
           <NListItem v-for="exercise in exercises" :key="exercise.id">
             <RouterLink :to="`/exercise/${exercise.id}`" class="c-primary">{{ exercise.name }}</RouterLink>
+            <NButton text class="ml-2 c-red">删除</NButton>
           </NListItem>
         </NList>
       </NCard>
