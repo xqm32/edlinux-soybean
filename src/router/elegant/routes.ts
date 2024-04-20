@@ -244,7 +244,8 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'learn',
       i18nKey: 'route.learn',
       icon: 'mdi:school-outline',
-      order: 2
+      order: 2,
+      roles: ['R_STUDENT']
     }
   },
   {
@@ -394,7 +395,8 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'teach',
       i18nKey: 'route.teach',
       icon: 'mdi:work-outline',
-      order: 2
+      order: 2,
+      roles: ['R_TEACHER']
     }
   },
   {
@@ -405,6 +407,17 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'user-center',
       i18nKey: 'route.user-center',
       hideInMenu: true
+    }
+  },
+  {
+    name: 'wiki',
+    path: '/wiki',
+    component: 'layout.base$view.wiki',
+    meta: {
+      title: 'wiki',
+      i18nKey: 'route.wiki',
+      order: 5,
+      icon: 'mdi:book-open-variant'
     }
   }
 ];

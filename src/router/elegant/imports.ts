@@ -43,4 +43,5 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   "multi-menu_second_child_home": () => import("@/views/multi-menu/second_child_home/index.vue"),
   teach: () => import("@/views/teach/index.vue"),
   "user-center": () => import("@/views/user-center/index.vue"),
+  wiki: () => import("@/views/wiki/index.vue"),
 };

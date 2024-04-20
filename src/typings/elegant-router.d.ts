@@ -56,6 +56,7 @@ declare module "@elegant-router/types" {
     "multi-menu_second_child_home": "/multi-menu/second/child/home";
     "teach": "/teach";
     "user-center": "/user-center";
+    "wiki": "/wiki";
   };
 
   /**
@@ -108,6 +109,7 @@ declare module "@elegant-router/types" {
     | "multi-menu"
     | "teach"
     | "user-center"
+    | "wiki"
   >;
 
   /**
@@ -153,6 +155,7 @@ declare module "@elegant-router/types" {
     | "multi-menu_second_child_home"
     | "teach"
     | "user-center"
+    | "wiki"
   >;
 
   /**
