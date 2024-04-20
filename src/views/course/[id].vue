@@ -34,7 +34,7 @@ onMounted(async () => {
             <NDrawerContent title="创建章节">
               <NForm>
                 <NFormItem label="章节标题">
-                  <NInput />
+                  <NInput :value="course.name" />
                 </NFormItem>
               </NForm>
               <NFlex justify="center"><NButton>创建</NButton></NFlex>

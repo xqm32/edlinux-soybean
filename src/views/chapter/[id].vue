@@ -16,6 +16,10 @@ const active = ref(false);
 function activate() {
   active.value = true;
 }
+const activeE = ref(false);
+function activateE() {
+  activeE.value = true;
+}
 
 const [attachments, exercises, chapter] = [ref(), ref(), ref()];
 const content = computed(() => pb.getFileUrl(chapter.value, chapter.value.content, { download: true }));
@@ -40,16 +44,16 @@ onMounted(async () => {
           <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
             <NDrawerContent title="编辑章节">
               <NForm>
-                <NFormItem label="章节标题"><NInput /></NFormItem>
+                <NFormItem label="章节标题"><NInput :value="chapter.name" /></NFormItem>
                 <NFormItem label="章节内容">
-                  <NUpload multiple directory-dnd :max="5">
+                  <NUpload>
                     <NUploadDragger>
                       <NText>点击或者拖动文件到该区域来上传</NText>
                     </NUploadDragger>
                   </NUpload>
                 </NFormItem>
                 <NFormItem label="章节附件">
-                  <NUpload multiple directory-dnd :max="5">
+                  <NUpload>
                     <NUploadDragger>
                       <NText>点击或者拖动文件到该区域来上传</NText>
                     </NUploadDragger>
@@ -61,30 +65,57 @@ onMounted(async () => {
           </NDrawer>
         </div>
       </template>
-      <NCard v-if="chapter.content" class="h-xl overflow-scroll" :scale="0.7">
-        <VuePdfEmbed annotation-layer text-layer :source="content" />
+      <NCard v-if="chapter.content">
+        <VuePdfEmbed annotation-layer text-layer :source="content" class="h-xl overflow-scroll" />
+        <template #footer>
+          {{ chapter.content }}
+          <a :href="content" class="c-primary">下载</a>
+        </template>
       </NCard>
       <NEmpty v-else />
       <NCard v-if="attachments.length > 0" size="small" title="附件" :bordered="false">
         <NList :show-divider="false">
-          <NListItem>
-            {{ chapter.content }}
-            <a :href="content" class="c-primary">下载</a>
-          </NListItem>
           <NListItem v-for="attachment in attachments" :key="attachment.id">
             {{ attachment.content }}
             <a :href="pb.getFileUrl(attachment, attachment.content, { download: true })" class="c-primary">下载</a>
+            <NPopconfirm
+              v-if="pb.authStore.model!.roles.includes('R_TEACHER')"
+              @positive-click="() => {}"
+              @negative-click="() => {}"
+            >
+              <template #trigger>
+                <NButton text class="ml-2 c-red">删除</NButton>
+              </template>
+              你确定要删除吗
+            </NPopconfirm>
           </NListItem>
         </NList>
       </NCard>
       <NCard v-if="exercises.length > 0" size="small" title="习题" :bordered="false">
         <template v-if="pb.authStore.model!.roles.includes('R_TEACHER')" #header-extra>
-          <NButton>添加习题</NButton>
+          <NButton @click="activateE">添加习题</NButton>
+          <NDrawer v-model:show="activeE" default-width="33%" resizable placement="right">
+            <NDrawerContent title="添加习题">
+              <NForm>
+                <NFormItem label="习题标题"><NInput /></NFormItem>
+              </NForm>
+              <NFlex justify="center"><NButton>提交</NButton></NFlex>
+            </NDrawerContent>
+          </NDrawer>
         </template>
         <NList :show-divider="false">
           <NListItem v-for="exercise in exercises" :key="exercise.id">
             <RouterLink :to="`/exercise/${exercise.id}`" class="c-primary">{{ exercise.name }}</RouterLink>
-            <NButton text class="ml-2 c-red">删除</NButton>
+            <NPopconfirm
+              v-if="pb.authStore.model!.roles.includes('R_TEACHER')"
+              @positive-click="() => {}"
+              @negative-click="() => {}"
+            >
+              <template #trigger>
+                <NButton text class="ml-2 c-red">删除</NButton>
+              </template>
+              你确定要删除吗
+            </NPopconfirm>
           </NListItem>
         </NList>
       </NCard>

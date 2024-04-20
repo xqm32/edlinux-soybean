@@ -47,6 +47,11 @@ async function submit() {
   tab.value = '测试结果';
 }
 
+const active = ref(false);
+function activate() {
+  active.value = true;
+}
+
 onMounted(async () => {
   exercise.value = await pb.collection('exercises').getOne(props.id);
 });
@@ -55,7 +60,29 @@ onMounted(async () => {
 <template>
   <NSplit direction="horizontal" :default-size="0.3">
     <template #1>
-      <NCard v-if="exercise" class="h-full" size="small" :bordered="false">
+      <NCard v-if="exercise" class="h-full" size="small" :bordered="false" :title="exercise.name">
+        <template v-if="pb.authStore.model!.roles.includes('R_TEACHER')" #header-extra>
+          <NButton @click="activate">编辑习题</NButton>
+          <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
+            <NDrawerContent title="编辑习题">
+              <NForm>
+                <NFormItem label="题目名称">
+                  <NInput :value="exercise.name" />
+                </NFormItem>
+                <NFormItem label="题目描述">
+                  <NInput type="textarea" :value="exercise.content" />
+                </NFormItem>
+                <NFormItem label="测试用例（JSON格式）">
+                  <NInput type="textarea" :value="exercise.cases" />
+                </NFormItem>
+                <NFormItem label="正确答案">
+                  <NInput type="textarea" :value="exercise.answer" />
+                </NFormItem>
+              </NForm>
+              <NFlex justify="center"><NButton>提交</NButton></NFlex>
+            </NDrawerContent>
+          </NDrawer>
+        </template>
         <NCode :code="exercise.content" />
       </NCard>
     </template>
