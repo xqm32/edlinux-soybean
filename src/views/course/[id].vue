@@ -27,13 +27,8 @@ onMounted(async () => {
     <NCard v-if="course" :title="course.name">
       <template #header-extra>
         {{ course.description }}
-      </template>
-      <NList v-if="chapters.length > 0" bordered>
-        <NListItem v-for="chapter in chapters" :key="chapter.id">
-          <NThing :title="chapter.name"></NThing>
-          <NButton @click="routerPush(`/chapter/${chapter.id}`)">进入章节</NButton>
-        </NListItem>
-        <NListItem v-if="pb.authStore.model!.roles.includes('R_TEACHER')">
+        <NButton v-if="pb.authStore.model!.roles.includes('R_STUDENT')" class="ml-2">加入课程</NButton>
+        <div v-if="pb.authStore.model!.roles.includes('R_TEACHER')" class="ml-2">
           <NButton @click="activate">创建章节</NButton>
           <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
             <NDrawerContent title="创建章节">
@@ -45,6 +40,12 @@ onMounted(async () => {
               <NFlex justify="center"><NButton>创建</NButton></NFlex>
             </NDrawerContent>
           </NDrawer>
+        </div>
+      </template>
+      <NList v-if="chapters.length > 0" bordered>
+        <NListItem v-for="chapter in chapters" :key="chapter.id">
+          <NThing :title="chapter.name"></NThing>
+          <NButton @click="routerPush(`/chapter/${chapter.id}`)">进入章节</NButton>
         </NListItem>
       </NList>
       <NEmpty v-else />
