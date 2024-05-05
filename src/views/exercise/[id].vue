@@ -1,43 +1,41 @@
 <script lang="ts" setup>
-import { onMounted, ref, shallowRef } from 'vue';
+import { onBeforeMount, ref, shallowRef } from 'vue';
 import { usePocketBase } from '@/store/modules/pb';
 import { runCode } from '@/service/api';
 
-const props = defineProps<{
-  id: string;
-}>();
-
 const pb = usePocketBase();
-
+const props = defineProps<{ id: string }>();
+const editorRef = shallowRef();
+const handleMount = (editor: any) => (editorRef.value = editor);
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
   formatOnType: true,
   formatOnPaste: true
 };
 
-const [language, code, tab, input, result] = [ref('c'), ref(''), ref('测试用例'), ref(''), ref()];
-const exercise = ref();
-const editorRef = shallowRef();
-const handleMount = (editor: any) => (editorRef.value = editor);
-
-function clear() {
+const input = ref('');
+const result = ref();
+const clear = () => {
   input.value = '';
-  result.value = '';
-}
+  result.value = undefined;
+};
 
-async function run() {
+const language = ref('c');
+const code = ref('');
+const tab = ref('测试用例');
+const run = async () => {
   result.value = await runCode({
     language: language.value,
     code: code.value,
-    cases: [
-      {
-        input: input.value
-      }
-    ]
+    cases: [{ input: input.value }]
   });
   tab.value = '测试结果';
-}
+};
 
+const exercise = ref();
+const initExercise = async () => {
+  exercise.value = await pb.collection('exercises').getOne(props.id);
+};
 async function submit() {
   result.value = await runCode({
     language: language.value,
@@ -52,8 +50,8 @@ function activate() {
   active.value = true;
 }
 
-onMounted(async () => {
-  exercise.value = await pb.collection('exercises').getOne(props.id);
+onBeforeMount(async () => {
+  await Promise.all([initExercise()]);
 });
 </script>
 
