@@ -1,46 +1,50 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { useRouterPush } from '@/hooks/common/router';
-import { useEdLinux } from '@/hooks/common/edlinux';
+import { onBeforeMount, ref } from 'vue';
+import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb } = useEdLinux();
-const { routerPush } = useRouterPush();
-
-const active = ref(false);
-function activate() {
-  active.value = true;
-}
 
 const courses = ref();
-onMounted(async () => {
+const initCourses = async () => {
   courses.value = await pb.collection('courses').getFullList({ filter: `teacherId="${pb.authStore.model!.id}"` });
+};
+
+const [active, activate] = useActive();
+
+onBeforeMount(async () => {
+  await Promise.all([initCourses()]);
 });
 </script>
 
 <template>
-  <div v-if="courses">
-    <NCard class="mb-2">
-      <NFlex justify="center">
-        <NButton @click="activate">创建课程</NButton>
-        <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
-          <NDrawerContent title="创建课程">
-            <NForm>
-              <NFormItem label="课程标题">
-                <NInput />
-              </NFormItem>
-            </NForm>
-            <NFlex justify="center"><NButton>创建</NButton></NFlex>
-          </NDrawerContent>
-        </NDrawer>
-      </NFlex>
-    </NCard>
-    <NGrid v-if="courses.length > 0" x-gap="12" :cols="4">
+  <div>
+    <NGrid v-if="courses" x-gap="12" :cols="4">
+      <NGridItem>
+        <NCard>
+          <template #header><NFlex justify="center" class="text-lg c-primary">开一门新课？</NFlex></template>
+          <NFlex class="w-full" justify="center">
+            <NButton type="primary" @click="activate">创建课程</NButton>
+          </NFlex>
+          <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
+            <NDrawerContent title="创建课程">
+              <NForm>
+                <NFormItem label="课程标题">
+                  <NInput />
+                </NFormItem>
+              </NForm>
+              <NFlex justify="center"><NButton>创建</NButton></NFlex>
+            </NDrawerContent>
+          </NDrawer>
+        </NCard>
+      </NGridItem>
       <NGridItem v-for="course in courses" :key="course.id">
         <NCard :title="course.name">
-          <NButton @click="routerPush(`/course/${course.id}`)">进入课程</NButton>
+          <NButton>
+            <RouterLink :to="`/course/${course.id}`">进入课程</RouterLink>
+          </NButton>
         </NCard>
       </NGridItem>
     </NGrid>
-    <NEmpty v-else class="h-full" />
+    <NEmpty v-else />
   </div>
 </template>

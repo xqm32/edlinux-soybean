@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRouterPush } from '@/hooks/common/router';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb, isStudent, isTeacher } = useEdLinux();
 const props = defineProps<{ id: string }>();
-const { routerPush } = useRouterPush();
 
 const chapters = ref();
 const initChapters = async () => {
@@ -25,32 +23,44 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <NCard v-if="course" :title="course.name">
-      <template #header-extra>
-        <NButton v-if="isStudent" class="ml-2">加入课程</NButton>
-        <div v-if="isTeacher" class="ml-2">
-          <NButton @click="activate">创建章节</NButton>
-          <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
-            <NDrawerContent title="创建章节">
-              <NForm>
-                <NFormItem label="章节标题">
-                  <NInput :value="course.name" />
-                </NFormItem>
-              </NForm>
-              <NFlex justify="center"><NButton>创建</NButton></NFlex>
-            </NDrawerContent>
-          </NDrawer>
-        </div>
-      </template>
-      <NCard :bordered="false">{{ course.description }}</NCard>
-      <NList v-if="chapters.length > 0" bordered>
-        <NListItem v-for="chapter in chapters" :key="chapter.id">
-          <NThing :title="chapter.name"></NThing>
-          <NButton @click="routerPush(`/chapter/${chapter.id}`)">进入章节</NButton>
-        </NListItem>
-      </NList>
-      <NEmpty v-else />
-    </NCard>
+  <div v-if="course">
+    <NGrid :cols="10">
+      <NGridItem :span="7">
+        <NCard :title="course.name">
+          <template #header-extra>
+            <NButton v-if="isStudent">加入课程</NButton>
+            <NButton v-if="isTeacher">编辑课程</NButton>
+          </template>
+          {{ course.description }}
+        </NCard>
+      </NGridItem>
+      <NGridItem :span="3">
+        <NCard title="课程章节">
+          <template v-if="isTeacher" #header-extra>
+            <div class="ml-2">
+              <NButton @click="activate">创建章节</NButton>
+              <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
+                <NDrawerContent title="创建章节">
+                  <NForm>
+                    <NFormItem label="章节标题">
+                      <NInput />
+                    </NFormItem>
+                  </NForm>
+                  <NFlex justify="center"><NButton>创建</NButton></NFlex>
+                </NDrawerContent>
+              </NDrawer>
+            </div>
+          </template>
+          <div v-if="chapters">
+            <div v-for="chapter in chapters" :key="chapter.id" class="mb-2">
+              <NButton text>
+                <RouterLink :to="`/chapter/${chapter.id}`">{{ chapter.name }}</RouterLink>
+              </NButton>
+            </div>
+          </div>
+          <NEmpty v-else />
+        </NCard>
+      </NGridItem>
+    </NGrid>
   </div>
 </template>

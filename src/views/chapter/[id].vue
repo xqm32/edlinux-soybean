@@ -6,8 +6,8 @@ import 'vue-pdf-embed/dist/style/annotationLayer.css';
 import 'vue-pdf-embed/dist/style/textLayer.css';
 import { useEdLinux } from '@/hooks/common/edlinux';
 
+const { pb, isTeacher } = useEdLinux();
 const props = defineProps<{ id: string }>();
-const { pb } = useEdLinux();
 const getFileUrl = (attachment: any) => pb.getFileUrl(attachment, attachment.content, { download: true });
 
 const attachments = ref();
@@ -39,6 +39,9 @@ onBeforeMount(async () => {
     <NGrid :cols="10">
       <NGridItem :span="7">
         <NCard :title="chapter.name">
+          <template #header-extra>
+            <NButton v-if="isTeacher" type="error">删除章节</NButton>
+          </template>
           <VuePdfEmbed
             annotation-layer
             text-layer
@@ -48,22 +51,31 @@ onBeforeMount(async () => {
         </NCard>
       </NGridItem>
       <NGridItem :span="3">
-        <NCard title="课程资源">
-          <NButton text class="mb-2">
-            <NTag type="primary" class="mr-2">课件</NTag>
-            <a :href="getFileUrl(chapter)">{{ chapter.content }}</a>
-          </NButton>
-          <div v-if="attachments">
-            <NButton v-for="attachment in attachments" :key="attachment.id" text class="mb-2">
-              <NTag class="mr-2">附件</NTag>
-              <a :href="getFileUrl(attachment)">{{ attachment.content }}</a>
+        <NCard title="章节资源">
+          <template #header-extra>
+            <NButton v-if="isTeacher">管理资源</NButton>
+          </template>
+          <div>
+            <NButton text class="mb-2">
+              <NTag type="primary" class="mr-2">课件</NTag>
+              <a :href="getFileUrl(chapter)">{{ chapter.content }}</a>
             </NButton>
           </div>
+          <div v-if="attachments">
+            <div v-for="attachment in attachments" :key="attachment.id" class="mb-2">
+              <NButton text>
+                <NTag class="mr-2">附件</NTag>
+                <a :href="getFileUrl(attachment)">{{ attachment.content }}</a>
+              </NButton>
+            </div>
+          </div>
           <div v-if="exercises">
-            <NButton v-for="exercise in exercises" :key="exercise.id" text class="mb-2">
-              <NTag type="success" class="mr-2">习题</NTag>
-              <RouterLink :to="`/exercise/${exercise.id}`">{{ exercise.name }}</RouterLink>
-            </NButton>
+            <div v-for="exercise in exercises" :key="exercise.id" class="mb-2">
+              <NButton text>
+                <NTag type="success" class="mr-2">习题</NTag>
+                <RouterLink :to="`/exercise/${exercise.id}`">{{ exercise.name }}</RouterLink>
+              </NButton>
+            </div>
           </div>
         </NCard>
       </NGridItem>
