@@ -31,7 +31,7 @@ onMounted(async () => {
             <NButton v-if="isStudent">加入课程</NButton>
             <NButton v-if="isTeacher">编辑课程</NButton>
           </template>
-          {{ course.description }}
+          <NCode :code="course.description" word-wrap />
         </NCard>
       </NGridItem>
       <NGridItem :span="3">
