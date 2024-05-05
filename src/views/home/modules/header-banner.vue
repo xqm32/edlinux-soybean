@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { $t } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
 import { usePocketBase } from '@/store/modules/pb';
@@ -14,7 +14,7 @@ const pb = usePocketBase();
 const user = ref();
 const gap = computed(() => (appStore.isMobile ? 0 : 16));
 
-onMounted(async () => {
+onBeforeMount(async () => {
   user.value = await pb.collection('users').getOne(pb.authStore.model!.id);
 });
 </script>
@@ -29,7 +29,9 @@ onMounted(async () => {
           </div>
           <div class="pl-12px">
             <h3 class="text-18px font-semibold">你好，{{ user.name }}！</h3>
-            <p class="text-#999 leading-30px">{{ $t('page.home.weatherDesc') }}</p>
+            <p class="text-#999 leading-30px">
+              {{ $t('page.home.weatherDesc') }}
+            </p>
           </div>
         </div>
       </NGi>
