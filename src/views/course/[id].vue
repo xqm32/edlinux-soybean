@@ -26,7 +26,6 @@ onMounted(async () => {
   <div>
     <NCard v-if="course" :title="course.name">
       <template #header-extra>
-        {{ course.description }}
         <NButton v-if="pb.authStore.model!.roles.includes('R_STUDENT')" class="ml-2">加入课程</NButton>
         <div v-if="pb.authStore.model!.roles.includes('R_TEACHER')" class="ml-2">
           <NButton @click="activate">创建章节</NButton>
@@ -42,6 +41,7 @@ onMounted(async () => {
           </NDrawer>
         </div>
       </template>
+      <NCard :bordered="false">{{ course.description }}</NCard>
       <NList v-if="chapters.length > 0" bordered>
         <NListItem v-for="chapter in chapters" :key="chapter.id">
           <NThing :title="chapter.name"></NThing>
