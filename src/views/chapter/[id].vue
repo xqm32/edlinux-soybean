@@ -55,17 +55,17 @@ onBeforeMount(async () => {
           <template #header-extra>
             <NButton v-if="isTeacher">管理资源</NButton>
           </template>
-          <div>
-            <NButton text class="mb-2">
+          <div class="mb-2">
+            <NButton tag="a" :href="getFileUrl(chapter)" text>
               <NTag type="primary" class="mr-2">课件</NTag>
-              <a :href="getFileUrl(chapter)">{{ chapter.content }}</a>
+              {{ chapter.content }}
             </NButton>
           </div>
           <div v-if="attachments">
             <div v-for="attachment in attachments" :key="attachment.id" class="mb-2">
-              <NButton text>
+              <NButton tag="a" :href="getFileUrl(attachment)" text>
                 <NTag class="mr-2">附件</NTag>
-                <a :href="getFileUrl(attachment)">{{ attachment.content }}</a>
+                {{ attachment.content }}
               </NButton>
             </div>
           </div>
