@@ -11,8 +11,16 @@ const initChapters = async () => {
 };
 
 const course = ref();
+const joined = ref(false);
 const initCourse = async () => {
+  const learn = (
+    await pb.collection('learn').getFullList({
+      filter: `studentId="${pb.authStore.model!.id}"`,
+      expand: 'courseId,courseId.teacherId'
+    })
+  ).map(item => item.expand!.courseId.id);
   course.value = await pb.collection('courses').getOne(props.id);
+  joined.value = learn.includes(props.id);
 };
 
 const [active, activate] = useActive();
@@ -28,7 +36,8 @@ onMounted(async () => {
       <NGridItem :span="7">
         <NCard :title="course.name">
           <template #header-extra>
-            <NButton v-if="isStudent">加入课程</NButton>
+            <NButton v-if="isStudent && !joined">加入课程</NButton>
+            <NButton v-if="isStudent && joined" type="error">退出课程</NButton>
             <NButton v-if="isTeacher">编辑课程</NButton>
           </template>
           <NCode :code="course.description" word-wrap />

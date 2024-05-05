@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
+import { useRouterPush } from '@/hooks/common/router';
 
 const { pb } = useEdLinux();
+const { routerPush } = useRouterPush();
 
 const courses = ref();
 const initCourses = async () => {
@@ -40,7 +42,7 @@ onBeforeMount(async () => {
       <NGridItem v-for="course in courses" :key="course.id">
         <NCard :title="course.name">
           <NButton>
-            <RouterLink :to="`/course/${course.id}`">进入课程</RouterLink>
+            <NButton @click="routerPush(`/course/${course.id}`)">进入课程</NButton>
           </NButton>
         </NCard>
       </NGridItem>
