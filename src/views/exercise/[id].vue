@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref, shallowRef } from 'vue';
-import { usePocketBase } from '@/store/modules/pb';
 import { runCode } from '@/service/api';
+import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 
-const pb = usePocketBase();
+const { pb } = useEdLinux();
 const props = defineProps<{ id: string }>();
 const editorRef = shallowRef();
 const handleMount = (editor: any) => (editorRef.value = editor);
@@ -45,10 +45,7 @@ async function submit() {
   tab.value = '测试结果';
 }
 
-const active = ref(false);
-function activate() {
-  active.value = true;
-}
+const [active, activate] = useActive();
 
 onBeforeMount(async () => {
   await Promise.all([initExercise()]);

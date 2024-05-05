@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
-import { usePocketBase } from '@/store/modules/pb';
+import { useEdLinux } from '@/hooks/common/edlinux';
 
-const pb = usePocketBase();
+const { pb } = useEdLinux();
 
 const courses = ref();
 const initCourses = async () => {

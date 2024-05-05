@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { usePocketBase } from '@/store/modules/pb';
+import { useEdLinux } from '@/hooks/common/edlinux';
 
-const pb = usePocketBase();
+const { pb } = useEdLinux();
 const user = ref();
 
 onMounted(async () => {

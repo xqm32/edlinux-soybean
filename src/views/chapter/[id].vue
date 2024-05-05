@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
-import { usePocketBase } from '@/store/modules/pb';
 import 'vue-pdf-embed/dist/style/index.css';
 import 'vue-pdf-embed/dist/style/annotationLayer.css';
 import 'vue-pdf-embed/dist/style/textLayer.css';
+import { useEdLinux } from '@/hooks/common/edlinux';
 
 const props = defineProps<{ id: string }>();
-const pb = usePocketBase();
+const { pb } = useEdLinux();
 const getFileUrl = (attachment: any) => pb.getFileUrl(attachment, attachment.content, { download: true });
 
 const attachments = ref();

@@ -1,24 +1,26 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouterPush } from '@/hooks/common/router';
-import { usePocketBase } from '@/store/modules/pb';
+import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 
-const props = defineProps<{
-  id: string;
-}>();
-
-const pb = usePocketBase();
+const { pb, isStudent, isTeacher } = useEdLinux();
+const props = defineProps<{ id: string }>();
 const { routerPush } = useRouterPush();
 
-const active = ref(false);
-function activate() {
-  active.value = true;
-}
-
-const [chapters, course] = [ref(), ref()];
-onMounted(async () => {
+const chapters = ref();
+const initChapters = async () => {
   chapters.value = await pb.collection('chapters').getFullList({ filter: `courseId="${props.id}"`, sort: 'order' });
+};
+
+const course = ref();
+const initCourse = async () => {
   course.value = await pb.collection('courses').getOne(props.id);
+};
+
+const [active, activate] = useActive();
+
+onMounted(async () => {
+  Promise.all([initCourse(), initChapters()]);
 });
 </script>
 
@@ -26,8 +28,8 @@ onMounted(async () => {
   <div>
     <NCard v-if="course" :title="course.name">
       <template #header-extra>
-        <NButton v-if="pb.authStore.model!.roles.includes('R_STUDENT')" class="ml-2">加入课程</NButton>
-        <div v-if="pb.authStore.model!.roles.includes('R_TEACHER')" class="ml-2">
+        <NButton v-if="isStudent" class="ml-2">加入课程</NButton>
+        <div v-if="isTeacher" class="ml-2">
           <NButton @click="activate">创建章节</NButton>
           <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
             <NDrawerContent title="创建章节">

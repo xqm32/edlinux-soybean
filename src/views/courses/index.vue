@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouterPush } from '@/hooks/common/router';
-import { usePocketBase } from '@/store/modules/pb';
+import { useEdLinux } from '@/hooks/common/edlinux';
 
-const pb = usePocketBase();
+const { pb } = useEdLinux();
 const { routerPush } = useRouterPush();
 
 const courses = ref();

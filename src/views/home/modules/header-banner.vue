@@ -2,14 +2,14 @@
 import { computed, onBeforeMount, ref } from 'vue';
 import { $t } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
-import { usePocketBase } from '@/store/modules/pb';
+import { useEdLinux } from '@/hooks/common/edlinux';
 
 defineOptions({
   name: 'HeaderBanner'
 });
 
 const appStore = useAppStore();
-const pb = usePocketBase();
+const { pb } = useEdLinux();
 
 const user = ref();
 const gap = computed(() => (appStore.isMobile ? 0 : 16));
@@ -29,9 +29,6 @@ onBeforeMount(async () => {
           </div>
           <div class="pl-12px">
             <h3 class="text-18px font-semibold">你好，{{ user.name }}！</h3>
-            <p class="text-#999 leading-30px">
-              {{ $t('page.home.weatherDesc') }}
-            </p>
           </div>
         </div>
       </NGi>
