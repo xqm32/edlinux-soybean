@@ -91,6 +91,7 @@ const exerciseModel = ref({
   cases: '',
   answer: ''
 });
+const [activeExercise, activateExercise] = useActive();
 async function createExercise() {
   await pb.collection('exercises').create({ chapterId: props.id, ...exerciseModel.value });
   await initExercises();
@@ -158,11 +159,10 @@ onBeforeMount(async () => {
                     <NUploadDragger>上传附件</NUploadDragger>
                   </NUpload>
                 </NForm>
-                <NFlex justify="center"><NButton class="mt-2">提交</NButton></NFlex>
               </NDrawerContent>
             </NDrawer>
-            <NButton class="ml-2" @click="activate">创建习题</NButton>
-            <NDrawer v-model:show="active" default-width="50%" resizable placement="right">
+            <NButton class="ml-2" @click="activateExercise">创建习题</NButton>
+            <NDrawer v-model:show="activeExercise" default-width="50%" resizable placement="right">
               <NDrawerContent title="编辑习题">
                 <NForm>
                   <NFormItem label="题目名称">
