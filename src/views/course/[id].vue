@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb, isStudent, isTeacher } = useEdLinux();
@@ -19,17 +19,17 @@ const courseModel = reactive({
   teacherId: pb.authStore.model!.id
 });
 const joined = ref(false);
+const learnId = ref();
 const initCourse = async () => {
-  const learn = (
-    await pb.collection('learn').getFullList({
-      filter: `studentId="${pb.authStore.model!.id}"`,
-      expand: 'courseId,courseId.teacherId'
-    })
-  ).map(item => item.expand!.courseId.id);
+  const learn = await pb.collection('learn').getFullList({
+    filter: `studentId="${pb.authStore.model!.id}"`,
+    expand: 'courseId,courseId.teacherId'
+  });
   course.value = await pb.collection('courses').getOne(props.id);
   courseModel.name = course.value.name;
   courseModel.description = course.value.description;
-  joined.value = learn.includes(props.id);
+  joined.value = learn.map(item => item.expand!.courseId.id).includes(props.id);
+  learnId.value = learn.find(item => item.expand!.courseId.id === props.id)?.id;
 };
 
 const chapterModel = reactive({
@@ -46,14 +46,24 @@ async function createChapter() {
 }
 
 const [editActive, editActivate] = useActive();
-async function createCourse() {
+async function updateCourse() {
   await pb.collection('courses').update(props.id, courseModel);
   await initCourse();
   editActive.value = false;
   window.$message!.success('修改成功');
 }
+async function joinCourse() {
+  await pb.collection('learn').create({ courseId: props.id, studentId: pb.authStore.model!.id });
+  await initCourse();
+  window.$message!.success('加入成功');
+}
+async function exitCourse() {
+  await pb.collection('learn').delete(learnId.value);
+  await initCourse();
+  window.$message!.success('退出成功');
+}
 
-onMounted(async () => {
+onBeforeMount(async () => {
   Promise.all([initCourse(), initChapters()]);
 });
 </script>
@@ -64,8 +74,11 @@ onMounted(async () => {
       <NGridItem :span="7">
         <NCard :title="course.name">
           <template #header-extra>
-            <NButton v-if="isStudent && !joined">加入课程</NButton>
-            <NButton v-if="isStudent && joined" type="error">退出课程</NButton>
+            <NButton v-if="isStudent && !joined" @click="joinCourse">加入课程</NButton>
+            <NPopconfirm v-if="isStudent && joined" @positive-click="exitCourse">
+              <template #trigger><NButton type="error">退出课程</NButton></template>
+              确认退出课程？
+            </NPopconfirm>
             <NButton v-if="isTeacher" @click="editActivate">编辑课程</NButton>
             <NDrawer v-model:show="editActive" default-width="33%" resizable placement="right">
               <NDrawerContent title="创建课程">
@@ -77,7 +90,7 @@ onMounted(async () => {
                     <NInput v-model:value="courseModel.description" type="textarea" :rows="16" />
                   </NFormItem>
                 </NForm>
-                <NFlex justify="center"><NButton @click="createCourse">确定</NButton></NFlex>
+                <NFlex justify="center"><NButton @click="updateCourse">确定</NButton></NFlex>
               </NDrawerContent>
             </NDrawer>
           </template>

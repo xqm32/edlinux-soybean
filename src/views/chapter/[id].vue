@@ -48,7 +48,7 @@ onBeforeMount(async () => {
       <NGridItem :span="7">
         <NCard :title="chapter.name">
           <template #header-extra>
-            <NPopconfirm @positive-click="deleteChapter">
+            <NPopconfirm v-if="isTeacher" @positive-click="deleteChapter">
               <template #trigger><NButton type="error">删除章节</NButton></template>
               确认删除章节？
             </NPopconfirm>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb } = useEdLinux();
@@ -8,7 +8,7 @@ const initWikis = async () => {
   wikis.value = await pb.collection('wiki').getFullList();
 };
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await Promise.all([initWikis()]);
 });
 </script>
