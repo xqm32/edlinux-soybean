@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
+import { useRouterPush } from '@/hooks/common/router';
 
 const { pb, isStudent, isTeacher } = useEdLinux();
+const { routerPush } = useRouterPush();
 const props = defineProps<{ id: string }>();
 
 const chapters = ref();
@@ -55,6 +57,11 @@ async function updateCourse() {
   activeUpdate.value = false;
   window.$message!.success('修改成功');
 }
+async function deleteCourse() {
+  await pb.collection('courses').delete(props.id);
+  window.$message!.success('删除成功');
+  await routerPush('/teach');
+}
 async function joinCourse() {
   await pb.collection('learn').create({ courseId: props.id, studentId: pb.authStore.model!.id });
   await initCourse();
@@ -96,6 +103,10 @@ onBeforeMount(async () => {
                 <NFlex justify="center"><NButton @click="updateCourse">确定</NButton></NFlex>
               </NDrawerContent>
             </NDrawer>
+            <NPopconfirm v-if="isTeacher" @positive-click="deleteCourse">
+              <template #trigger><NButton type="error" class="ml-2">删除课程</NButton></template>
+              确认删除课程，此操作不可恢复？
+            </NPopconfirm>
           </template>
           <NCode :code="course.description" word-wrap />
         </NCard>
