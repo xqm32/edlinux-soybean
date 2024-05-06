@@ -95,7 +95,7 @@ const [activeExercise, activateExercise] = useActive();
 async function createExercise() {
   await pb.collection('exercises').create({ chapterId: props.id, ...exerciseModel.value });
   await initExercises();
-  active.value = false;
+  activeExercise.value = false;
   window.$message!.success('创建成功');
 }
 
