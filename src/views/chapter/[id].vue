@@ -43,11 +43,13 @@ onBeforeMount(async () => {
             <NButton v-if="isTeacher" type="error">删除章节</NButton>
           </template>
           <VuePdfEmbed
+            v-if="chapter.content"
             annotation-layer
             text-layer
             :source="getFileUrl(chapter)"
             class="h-xl overflow-x-hidden overflow-y-scroll border"
           />
+          <NEmpty v-else description="暂无课件" />
         </NCard>
       </NGridItem>
       <NGridItem :span="3">
