@@ -13,9 +13,27 @@ const props = defineProps<{ id: string }>();
 const getFileUrl = (attachment: any) => pb.getFileUrl(attachment, attachment.content, { download: true });
 
 const chapter = ref();
-const initChapter = async () => {
+const chapterModel = ref({
+  name: '',
+  order: 0
+});
+const [activeUpdate, activateUpdate] = useActive();
+async function initChapter() {
   chapter.value = await pb.collection('chapters').getOne(props.id);
-};
+  chapterModel.value.name = chapter.value.name;
+  chapterModel.value.order = chapter.value.order;
+}
+async function updateChapter() {
+  await pb.collection('chapters').update(props.id, chapterModel.value);
+  await initChapter();
+  window.$message!.success('修改成功');
+  activeUpdate.value = false;
+}
+async function deleteChapter() {
+  await pb.collection('chapters').delete(props.id);
+  window.$message!.success('删除成功');
+  await routerPush(`/course/${chapter.value.courseId}`);
+}
 
 const exercises = ref();
 const initExercises = async () => {
@@ -49,12 +67,6 @@ async function deleteAttachment(data: any) {
   await initAttachments();
 }
 
-async function deleteChapter() {
-  await pb.collection('chapters').delete(props.id);
-  window.$message!.success('删除成功');
-  await routerPush(`/course/${chapter.value.courseId}`);
-}
-
 onBeforeMount(async () => {
   await Promise.all([initChapter(), initAttachments(), initExercises()]);
   await initFileList();
@@ -67,8 +79,22 @@ onBeforeMount(async () => {
       <NGridItem :span="7">
         <NCard :title="chapter.name">
           <template #header-extra>
+            <NButton v-if="isTeacher" @click="activateUpdate">编辑章节</NButton>
+            <NDrawer v-model:show="activeUpdate" default-width="33%" resizable placement="right">
+              <NDrawerContent title="编辑章节">
+                <NForm>
+                  <NFormItem label="章节标题">
+                    <NInput v-model:value="chapterModel.name" />
+                  </NFormItem>
+                  <NFormItem label="章节排序">
+                    <NInputNumber v-model:value="chapterModel.order" class="w-full" />
+                  </NFormItem>
+                </NForm>
+                <NFlex justify="center"><NButton @click="updateChapter">提交</NButton></NFlex>
+              </NDrawerContent>
+            </NDrawer>
             <NPopconfirm v-if="isTeacher" @positive-click="deleteChapter">
-              <template #trigger><NButton type="error">删除章节</NButton></template>
+              <template #trigger><NButton type="error" class="ml-2">删除章节</NButton></template>
               确认删除章节？
             </NPopconfirm>
           </template>
