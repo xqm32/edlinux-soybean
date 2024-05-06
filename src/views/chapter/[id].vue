@@ -119,7 +119,7 @@ onBeforeMount(async () => {
                     <NUploadDragger>点击或者拖动文件到该区域来上传</NUploadDragger>
                   </NUpload>
                 </NForm>
-                <NFlex justify="center"><NButton>确定</NButton></NFlex>
+                <NFlex justify="center"><NButton class="mt-2">提交</NButton></NFlex>
               </NDrawerContent>
             </NDrawer>
           </template>
@@ -133,7 +133,7 @@ onBeforeMount(async () => {
             <div v-for="attachment in attachments" :key="attachment.id" class="mb-2">
               <NButton tag="a" :href="getFileUrl(attachment)" text>
                 <NTag class="mr-2">附件</NTag>
-                {{ attachment.content }}
+                {{ attachment.content.substring(0, 24) }}
               </NButton>
             </div>
           </div>
