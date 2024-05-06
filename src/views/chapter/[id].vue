@@ -17,11 +17,21 @@ const chapterModel = ref({
   name: '',
   order: 0
 });
+const chapterContent = ref();
 const [activeUpdate, activateUpdate] = useActive();
 async function initChapter() {
   chapter.value = await pb.collection('chapters').getOne(props.id);
   chapterModel.value.name = chapter.value.name;
   chapterModel.value.order = chapter.value.order;
+  const content = chapter.value.content;
+  chapterContent.value = [
+    {
+      id: content,
+      name: content,
+      url: pb.getFileUrl(content, content, { download: true }),
+      status: 'finished'
+    }
+  ];
 }
 async function updateChapter() {
   await pb.collection('chapters').update(props.id, chapterModel.value);
@@ -29,10 +39,18 @@ async function updateChapter() {
   window.$message!.success('修改成功');
   activeUpdate.value = false;
 }
+async function updateChapterContent({ file }: any) {
+  await pb.collection('chapters').update(props.id, { content: file.file });
+  await initChapter();
+}
 async function deleteChapter() {
   await pb.collection('chapters').delete(props.id);
   window.$message!.success('删除成功');
   await routerPush(`/course/${chapter.value.courseId}`);
+}
+async function deleteChapterContent() {
+  await pb.collection('chapters').update(props.id, { content: null });
+  await initChapter();
 }
 
 const exercises = ref();
@@ -115,8 +133,16 @@ onBeforeMount(async () => {
             <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
               <NDrawerContent title="创建课程">
                 <NForm>
+                  <NUpload
+                    v-model:file-list="chapterContent"
+                    :custom-request="updateChapterContent"
+                    class="mb-2"
+                    @remove="deleteChapterContent"
+                  >
+                    <NUploadDragger>上传课件</NUploadDragger>
+                  </NUpload>
                   <NUpload v-model:file-list="fileList" :custom-request="createAttachment" @remove="deleteAttachment">
-                    <NUploadDragger>点击或者拖动文件到该区域来上传</NUploadDragger>
+                    <NUploadDragger>上传附件</NUploadDragger>
                   </NUpload>
                 </NForm>
                 <NFlex justify="center"><NButton class="mt-2">提交</NButton></NFlex>
