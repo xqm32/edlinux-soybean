@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 import { useRouterPush } from '@/hooks/common/router';
 
@@ -7,18 +7,17 @@ const { pb } = useEdLinux();
 const { routerPush } = useRouterPush();
 
 const courses = ref();
-const initCourses = async () => {
-  courses.value = await pb.collection('courses').getFullList({ filter: `teacherId="${pb.authStore.model!.id}"` });
-};
-
-const [active, activate] = useActive();
-const courseModel = reactive({
+const courseModel = ref({
   name: '',
   description: '',
   teacherId: pb.authStore.model!.id
 });
+const [active, activate] = useActive();
+async function initCourses() {
+  courses.value = await pb.collection('courses').getFullList({ filter: `teacherId="${pb.authStore.model!.id}"` });
+}
 async function createCourse() {
-  await pb.collection('courses').create(courseModel);
+  await pb.collection('courses').create(courseModel.value);
   await initCourses();
   active.value = false;
   window.$message!.success('创建成功');
@@ -45,7 +44,7 @@ onBeforeMount(async () => {
                   <NInput v-model:value="courseModel.name" />
                 </NFormItem>
                 <NFormItem label="课程描述">
-                  <NInput v-model:value="courseModel.description" type="textarea" />
+                  <NInput v-model:value="courseModel.description" type="textarea" class="font-mono" :rows="16" />
                 </NFormItem>
               </NForm>
               <NFlex justify="center"><NButton @click="createCourse">创建</NButton></NFlex>

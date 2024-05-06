@@ -1,55 +1,58 @@
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb, isStudent, isTeacher } = useEdLinux();
 const props = defineProps<{ id: string }>();
 
 const chapters = ref();
-const initChapters = async () => {
+const chapterModel = ref({
+  name: '',
+  order: 0,
+  courseId: props.id
+});
+const [active, activate] = useActive();
+async function initChapters() {
   chapters.value = await pb
     .collection('chapters')
     .getFullList({ filter: `courseId="${props.id}"`, sort: 'order,created' });
-};
+}
+async function createChapter() {
+  await pb.collection('chapters').create(chapterModel.value);
+  await initChapters();
+  chapterModel.value = {
+    name: '',
+    order: 0,
+    courseId: props.id
+  };
+  active.value = false;
+  window.$message!.success('创建成功');
+}
 
 const course = ref();
-const courseModel = reactive({
+const courseModel = ref({
   name: '',
   description: '',
   teacherId: pb.authStore.model!.id
 });
 const joined = ref(false);
 const learnId = ref();
-const initCourse = async () => {
+const [activeUpdate, activateUpdate] = useActive();
+async function initCourse() {
   const learn = await pb.collection('learn').getFullList({
     filter: `studentId="${pb.authStore.model!.id}"`,
     expand: 'courseId,courseId.teacherId'
   });
   course.value = await pb.collection('courses').getOne(props.id);
-  courseModel.name = course.value.name;
-  courseModel.description = course.value.description;
+  courseModel.value.name = course.value.name;
+  courseModel.value.description = course.value.description;
   joined.value = learn.map(item => item.expand!.courseId.id).includes(props.id);
   learnId.value = learn.find(item => item.expand!.courseId.id === props.id)?.id;
-};
-
-const chapterModel = reactive({
-  name: '',
-  order: 0,
-  courseId: props.id
-});
-const [active, activate] = useActive();
-async function createChapter() {
-  await pb.collection('chapters').create(chapterModel);
-  await initChapters();
-  active.value = false;
-  window.$message!.success('创建成功');
 }
-
-const [editActive, editActivate] = useActive();
 async function updateCourse() {
-  await pb.collection('courses').update(props.id, courseModel);
+  await pb.collection('courses').update(props.id, courseModel.value);
   await initCourse();
-  editActive.value = false;
+  activeUpdate.value = false;
   window.$message!.success('修改成功');
 }
 async function joinCourse() {
@@ -79,15 +82,15 @@ onBeforeMount(async () => {
               <template #trigger><NButton type="error">退出课程</NButton></template>
               确认退出课程？
             </NPopconfirm>
-            <NButton v-if="isTeacher" @click="editActivate">编辑课程</NButton>
-            <NDrawer v-model:show="editActive" default-width="33%" resizable placement="right">
+            <NButton v-if="isTeacher" @click="activateUpdate">编辑课程</NButton>
+            <NDrawer v-model:show="activeUpdate" default-width="33%" resizable placement="right">
               <NDrawerContent title="创建课程">
                 <NForm>
                   <NFormItem label="课程标题">
                     <NInput v-model:value="courseModel.name" />
                   </NFormItem>
                   <NFormItem label="课程描述">
-                    <NInput v-model:value="courseModel.description" type="textarea" :rows="16" />
+                    <NInput v-model:value="courseModel.description" type="textarea" :rows="16" class="font-mono" />
                   </NFormItem>
                 </NForm>
                 <NFlex justify="center"><NButton @click="updateCourse">确定</NButton></NFlex>

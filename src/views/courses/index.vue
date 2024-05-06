@@ -7,9 +7,9 @@ const { pb } = useEdLinux();
 const { routerPush } = useRouterPush();
 
 const courses = ref();
-const initCourses = async () => {
+async function initCourses() {
   courses.value = await pb.collection('courses').getFullList();
-};
+}
 
 onBeforeMount(async () => {
   await Promise.all([initCourses()]);

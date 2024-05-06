@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, ref, shallowRef } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
 import 'vue-pdf-embed/dist/style/index.css';
 import 'vue-pdf-embed/dist/style/annotationLayer.css';
 import 'vue-pdf-embed/dist/style/textLayer.css';
-import type { UploadFileInfo } from 'naive-ui';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 import { useRouterPush } from '@/hooks/common/router';
 
@@ -13,18 +12,9 @@ const { routerPush } = useRouterPush();
 const props = defineProps<{ id: string }>();
 const getFileUrl = (attachment: any) => pb.getFileUrl(attachment, attachment.content, { download: true });
 
-const attachments = ref();
-const fileList = shallowRef();
-const initAttachments = async () => {
-  attachments.value = await pb
-    .collection('attachments')
-    .getFullList({ filter: `chapterId="${props.id}"`, sort: 'created' });
-  fileList.value = attachments.value?.map((attachment: any) => ({
-    id: attachment.id,
-    name: attachment.content,
-    url: getFileUrl(attachment),
-    status: 'finished'
-  }));
+const chapter = ref();
+const initChapter = async () => {
+  chapter.value = await pb.collection('chapters').getOne(props.id);
 };
 
 const exercises = ref();
@@ -34,10 +24,30 @@ const initExercises = async () => {
     .getFullList({ filter: `chapterId="${props.id}"`, sort: 'created' });
 };
 
-const chapter = ref();
-const initChapter = async () => {
-  chapter.value = await pb.collection('chapters').getOne(props.id);
-};
+const attachments = ref();
+const fileList = ref();
+const [active, activate] = useActive();
+async function initAttachments() {
+  attachments.value = await pb
+    .collection('attachments')
+    .getFullList({ filter: `chapterId="${props.id}"`, sort: 'created' });
+}
+async function initFileList() {
+  fileList.value = attachments.value.map((attachment: any) => ({
+    id: attachment.id,
+    name: attachment.content,
+    url: getFileUrl(attachment),
+    status: 'finished'
+  }));
+}
+async function createAttachment({ file }: any) {
+  await pb.collection('attachments').create({ chapterId: props.id, content: file.file });
+  await initAttachments();
+}
+async function deleteAttachment(data: any) {
+  await pb.collection('attachments').delete(data.file.id);
+  await initAttachments();
+}
 
 async function deleteChapter() {
   await pb.collection('chapters').delete(props.id);
@@ -45,17 +55,9 @@ async function deleteChapter() {
   await routerPush(`/course/${chapter.value.courseId}`);
 }
 
-const [active, activate] = useActive();
-async function handleRemove(data: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
-  await pb.collection('attachments').delete(data.file.id);
-}
-async function uploadFile({ file }: any) {
-  await pb.collection('attachments').create({ chapterId: props.id, content: file.file });
-  await initAttachments();
-}
-
 onBeforeMount(async () => {
   await Promise.all([initChapter(), initAttachments(), initExercises()]);
+  await initFileList();
 });
 </script>
 
@@ -87,7 +89,7 @@ onBeforeMount(async () => {
             <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
               <NDrawerContent title="创建课程">
                 <NForm>
-                  <NUpload v-model:file-list="fileList" :custom-request="uploadFile" @remove="handleRemove">
+                  <NUpload v-model:file-list="fileList" :custom-request="createAttachment" @remove="deleteAttachment">
                     <NUploadDragger>点击或者拖动文件到该区域来上传</NUploadDragger>
                   </NUpload>
                 </NForm>

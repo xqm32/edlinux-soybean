@@ -5,32 +5,34 @@ import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb } = useEdLinux();
 const props = defineProps<{ id: string }>();
-const editorRef = shallowRef();
-const handleMount = (editor: any) => (editorRef.value = editor);
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
   formatOnType: true,
   formatOnPaste: true
 };
+const editorRef = shallowRef();
+function handleMount(editor: any) {
+  editorRef.value = editor;
+}
 
 const input = ref('');
 const result = ref();
-const clear = () => {
+function clear() {
   input.value = '';
   result.value = undefined;
-};
+}
 
 const language = ref('c');
 const code = ref('');
 const tab = ref('测试用例');
-const run = async () => {
+async function run() {
   result.value = await runCode({
     language: language.value,
     code: code.value,
     cases: [{ input: input.value }]
   });
   tab.value = '测试结果';
-};
+}
 
 const exercise = ref();
 const exerciseModel = ref({
@@ -39,10 +41,10 @@ const exerciseModel = ref({
   cases: '',
   answer: ''
 });
-const initExercise = async () => {
+async function initExercise() {
   exercise.value = await pb.collection('exercises').getOne(props.id);
   exerciseModel.value = { ...exercise.value };
-};
+}
 async function submit() {
   result.value = await runCode({
     language: language.value,

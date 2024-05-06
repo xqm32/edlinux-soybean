@@ -4,9 +4,9 @@ import { useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb } = useEdLinux();
 const wikis = ref();
-const initWikis = async () => {
+async function initWikis() {
   wikis.value = await pb.collection('wiki').getFullList();
-};
+}
 
 onBeforeMount(async () => {
   await Promise.all([initWikis()]);

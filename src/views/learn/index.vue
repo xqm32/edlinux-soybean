@@ -7,12 +7,12 @@ const { pb } = useEdLinux();
 const { routerPush } = useRouterPush();
 
 const courses = ref();
-const initCourses = async () => {
+async function initCourses() {
   courses.value = await pb.collection('learn').getFullList({
     filter: `studentId="${pb.authStore.model!.id}"`,
     expand: 'courseId,courseId.teacherId'
   });
-};
+}
 
 onBeforeMount(async () => {
   await Promise.all([initCourses()]);

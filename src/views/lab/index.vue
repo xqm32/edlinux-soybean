@@ -2,32 +2,34 @@
 import { ref, shallowRef } from 'vue';
 import { runCode } from '@/service/api';
 
-const editorRef = shallowRef();
-const handleMount = (editor: any) => (editorRef.value = editor);
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
   formatOnType: true,
   formatOnPaste: true
 };
+const editorRef = shallowRef();
+function handleMount(editor: any) {
+  editorRef.value = editor;
+}
 
 const input = ref('');
 const result = ref();
-const clear = () => {
+function clear() {
   input.value = '';
   result.value = undefined;
-};
+}
 
 const language = ref('c');
 const code = ref('');
 const tab = ref('测试用例');
-const run = async () => {
+async function run() {
   result.value = await runCode({
     language: language.value,
     code: code.value,
     cases: [{ input: input.value }]
   });
   tab.value = '测试结果';
-};
+}
 </script>
 
 <template>
