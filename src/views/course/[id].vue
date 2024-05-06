@@ -35,8 +35,9 @@ const [active, activate] = useActive();
 const [editActive, editActivate] = useActive();
 async function createCourse() {
   await pb.collection('courses').update(props.id, courseModel);
-  initCourse();
+  await initCourse();
   editActive.value = false;
+  window.$message!.success('修改成功');
 }
 
 onMounted(async () => {

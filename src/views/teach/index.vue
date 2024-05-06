@@ -19,8 +19,9 @@ const courseModel = reactive({
 });
 async function createCourse() {
   await pb.collection('courses').create(courseModel);
-  initCourses();
+  await initCourses();
   active.value = false;
+  window.$message!.success('创建成功');
 }
 
 onBeforeMount(async () => {
