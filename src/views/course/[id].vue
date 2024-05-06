@@ -105,7 +105,7 @@ onBeforeMount(async () => {
             </NDrawer>
             <NPopconfirm v-if="isTeacher" @positive-click="deleteCourse">
               <template #trigger><NButton type="error" class="ml-2">删除课程</NButton></template>
-              确认删除课程，此操作不可恢复？
+              确认删除课程？此操作不可恢复！
             </NPopconfirm>
           </template>
           <NCode :code="course.description" word-wrap />
