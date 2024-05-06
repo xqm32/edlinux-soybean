@@ -54,13 +54,6 @@ const headerMenus = computed(() => {
       <GlobalBreadcrumb v-if="!appStore.isMobile" class="ml-12px" />
     </div>
     <div class="h-full flex-y-center justify-end">
-      <FullScreen v-if="!appStore.isMobile" :full="isFullscreen" @click="toggle" />
-      <ThemeSchemaSwitch
-        :theme-schema="themeStore.themeScheme"
-        :is-dark="themeStore.darkMode"
-        @switch="themeStore.toggleThemeScheme"
-      />
-      <ThemeButton />
       <UserAvatar />
     </div>
   </DarkModeContainer>
