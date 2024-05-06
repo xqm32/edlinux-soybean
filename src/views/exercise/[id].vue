@@ -33,8 +33,15 @@ const run = async () => {
 };
 
 const exercise = ref();
+const exerciseModel = ref({
+  name: '',
+  content: '',
+  cases: '',
+  answer: ''
+});
 const initExercise = async () => {
   exercise.value = await pb.collection('exercises').getOne(props.id);
+  exerciseModel.value = { ...exercise.value };
 };
 async function submit() {
   result.value = await runCode({
@@ -46,6 +53,12 @@ async function submit() {
 }
 
 const [active, activate] = useActive();
+async function updateExercise() {
+  await pb.collection('exercises').update(props.id, exerciseModel.value);
+  await initExercise();
+  active.value = false;
+  window.$message!.success('更新成功');
+}
 
 onBeforeMount(async () => {
   await Promise.all([initExercise()]);
@@ -62,19 +75,19 @@ onBeforeMount(async () => {
             <NDrawerContent title="编辑习题">
               <NForm>
                 <NFormItem label="题目名称">
-                  <NInput :value="exercise.name" />
+                  <NInput v-model:value="exerciseModel.name" />
                 </NFormItem>
                 <NFormItem label="题目描述">
-                  <NInput type="textarea" :value="exercise.content" />
+                  <NInput v-model:value="exerciseModel.content" type="textarea" />
                 </NFormItem>
                 <NFormItem label="测试用例（JSON格式）">
-                  <NInput type="textarea" :value="exercise.cases" />
+                  <NInput v-model:value="exerciseModel.cases" type="textarea" />
                 </NFormItem>
                 <NFormItem label="正确答案">
-                  <NInput type="textarea" :value="exercise.answer" />
+                  <NInput v-model:value="exerciseModel.answer" type="textarea" />
                 </NFormItem>
               </NForm>
-              <NFlex justify="center"><NButton>提交</NButton></NFlex>
+              <NFlex justify="center"><NButton @click="updateExercise">提交</NButton></NFlex>
             </NDrawerContent>
           </NDrawer>
         </template>
