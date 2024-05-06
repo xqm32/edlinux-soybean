@@ -30,7 +30,7 @@ onBeforeMount(async () => {
 
 <template>
   <div>
-    <NGrid v-if="courses" x-gap="12" :cols="4">
+    <NGrid v-if="courses" x-gap="8" :cols="5">
       <NGridItem>
         <NCard>
           <template #header><NFlex justify="center" class="text-lg c-primary">开一门新课？</NFlex></template>

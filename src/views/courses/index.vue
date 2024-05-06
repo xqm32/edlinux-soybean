@@ -18,7 +18,7 @@ onBeforeMount(async () => {
 
 <template>
   <div>
-    <NGrid v-if="courses" x-gap="12" :cols="4">
+    <NGrid v-if="courses" x-gap="8" :cols="5">
       <NGridItem v-for="course in courses" :key="course.id">
         <NCard :title="course.name">
           <NButton @click="routerPush(`/course/${course.id}`)">进入课程</NButton>

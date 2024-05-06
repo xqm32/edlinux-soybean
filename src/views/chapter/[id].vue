@@ -24,6 +24,7 @@ async function initChapter() {
   chapterModel.value.name = chapter.value.name;
   chapterModel.value.order = chapter.value.order;
   const content = chapter.value.content;
+  if (!content) return;
   chapterContent.value = [
     {
       id: content,
@@ -107,7 +108,7 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="chapter">
-    <NGrid :cols="10" x-gap="2">
+    <NGrid :cols="10" x-gap="8">
       <NGridItem :span="7">
         <NCard :title="chapter.name">
           <template #header-extra>
