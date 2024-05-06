@@ -7,7 +7,9 @@ const props = defineProps<{ id: string }>();
 
 const chapters = ref();
 const initChapters = async () => {
-  chapters.value = await pb.collection('chapters').getFullList({ filter: `courseId="${props.id}"`, sort: 'order' });
+  chapters.value = await pb
+    .collection('chapters')
+    .getFullList({ filter: `courseId="${props.id}"`, sort: 'order,created' });
 };
 
 const course = ref();
@@ -30,7 +32,18 @@ const initCourse = async () => {
   joined.value = learn.includes(props.id);
 };
 
+const chapterModel = reactive({
+  name: '',
+  order: 0,
+  courseId: props.id
+});
 const [active, activate] = useActive();
+async function createChapter() {
+  await pb.collection('chapters').create(chapterModel);
+  await initChapters();
+  active.value = false;
+  window.$message!.success('创建成功');
+}
 
 const [editActive, editActivate] = useActive();
 async function createCourse() {
@@ -80,10 +93,13 @@ onMounted(async () => {
                 <NDrawerContent title="创建章节">
                   <NForm>
                     <NFormItem label="章节标题">
-                      <NInput />
+                      <NInput v-model:value="chapterModel.name" />
+                    </NFormItem>
+                    <NFormItem label="章节排序">
+                      <NInputNumber v-model:value="chapterModel.order" class="w-full" />
                     </NFormItem>
                   </NForm>
-                  <NFlex justify="center"><NButton>创建</NButton></NFlex>
+                  <NFlex justify="center"><NButton @click="createChapter">创建</NButton></NFlex>
                 </NDrawerContent>
               </NDrawer>
             </div>
