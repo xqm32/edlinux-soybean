@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, shallowRef } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
 import 'vue-pdf-embed/dist/style/index.css';
 import 'vue-pdf-embed/dist/style/annotationLayer.css';
@@ -14,7 +14,7 @@ const props = defineProps<{ id: string }>();
 const getFileUrl = (attachment: any) => pb.getFileUrl(attachment, attachment.content, { download: true });
 
 const attachments = ref();
-const fileList = ref();
+const fileList = shallowRef();
 const initAttachments = async () => {
   attachments.value = await pb
     .collection('attachments')
@@ -48,7 +48,6 @@ async function deleteChapter() {
 const [active, activate] = useActive();
 async function handleRemove(data: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
   await pb.collection('attachments').delete(data.file.id);
-  await initAttachments();
 }
 async function uploadFile({ file }: any) {
   await pb.collection('attachments').create({ chapterId: props.id, content: file.file });
