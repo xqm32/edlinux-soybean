@@ -59,7 +59,8 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'chapter',
       i18nKey: 'route.chapter',
-      hideInMenu: true
+      hideInMenu: true,
+      icon: 'mdi:book-outline'
     }
   },
   {
@@ -70,7 +71,8 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'course',
       hideInMenu: true,
-      i18nKey: 'route.course'
+      i18nKey: 'route.course',
+      icon: 'mdi:google-classroom'
     }
   },
   {
@@ -92,7 +94,8 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'exercise',
       i18nKey: 'route.exercise',
-      hideInMenu: true
+      hideInMenu: true,
+      icon: 'mdi:file-edit-outline'
     }
   },
   {
