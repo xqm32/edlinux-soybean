@@ -106,7 +106,7 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="chapter">
-    <NGrid :cols="10">
+    <NGrid :cols="10" x-gap="2">
       <NGridItem :span="7">
         <NCard :title="chapter.name">
           <template #header-extra>
