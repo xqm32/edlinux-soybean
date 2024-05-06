@@ -66,75 +66,77 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <NSplit direction="horizontal" :default-size="0.3">
-    <template #1>
-      <NCard v-if="exercise" class="h-full" size="small" :bordered="false" :title="exercise.name">
-        <template v-if="pb.authStore.model!.roles.includes('R_TEACHER')" #header-extra>
-          <NButton @click="activate">编辑习题</NButton>
-          <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
-            <NDrawerContent title="编辑习题">
-              <NForm>
-                <NFormItem label="题目名称">
-                  <NInput v-model:value="exerciseModel.name" />
-                </NFormItem>
-                <NFormItem label="题目描述">
-                  <NInput v-model:value="exerciseModel.content" type="textarea" />
-                </NFormItem>
-                <NFormItem label="测试用例（JSON格式）">
-                  <NInput v-model:value="exerciseModel.cases" type="textarea" />
-                </NFormItem>
-                <NFormItem label="正确答案">
-                  <NInput v-model:value="exerciseModel.answer" type="textarea" />
-                </NFormItem>
-              </NForm>
-              <NFlex justify="center"><NButton @click="updateExercise">提交</NButton></NFlex>
-            </NDrawerContent>
-          </NDrawer>
-        </template>
-        <NCode :code="exercise.content" />
-      </NCard>
-    </template>
-    <template #2>
-      <NSplit direction="vertical" :default-size="0.7">
-        <template #1>
-          <NCard class="h-full" size="small" :bordered="false">
-            <VueMonacoEditor
-              v-model:value="code"
-              v-model:language="language"
-              :options="MONACO_EDITOR_OPTIONS"
-              @mount="handleMount"
-            />
-          </NCard>
-        </template>
-        <template #2>
-          <NCard class="h-full overflow-auto" size="small" :bordered="false">
-            <NTabs v-model:value="tab">
-              <NTabPane name="测试用例" size="small">
-                <NInput v-model:value="input" type="textarea" />
-                <NFlex justify="center" class="mt-1 w-full">
-                  <NButton @click="clear">重置</NButton>
-                  <NButton type="primary" @click="run">运行</NButton>
-                  <NButton type="success" @click="submit">提交</NButton>
-                </NFlex>
-              </NTabPane>
-              <NTabPane name="测试结果" size="small">
-                <NFlex v-if="['CE', 'RE', 'WA'].includes(result?.code)" vertical>
-                  <NTag type="error">{{ result?.message }}</NTag>
-                  <NCode :code="result?.stderr" class="text-red" />
-                </NFlex>
-                <NFlex v-else-if="['AC'].includes(result?.code)" vertical>
-                  <NTag type="success">{{ result?.message }}</NTag>
-                </NFlex>
-                <NFlex v-else-if="['TEST'].includes(result?.code)" vertical>
-                  <NTag>{{ result?.message }}</NTag>
-                  <NCode v-if="result?.outputs.join()" :code="result?.outputs.join()" />
-                </NFlex>
-                <NEmpty v-else />
-              </NTabPane>
-            </NTabs>
-          </NCard>
-        </template>
-      </NSplit>
-    </template>
-  </NSplit>
+  <div>
+    <NSplit direction="horizontal" :default-size="0.3">
+      <template #1>
+        <NCard v-if="exercise" class="h-full" size="small" :bordered="false" :title="exercise.name">
+          <template v-if="pb.authStore.model!.roles.includes('R_TEACHER')" #header-extra>
+            <NButton @click="activate">编辑习题</NButton>
+            <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
+              <NDrawerContent title="编辑习题">
+                <NForm>
+                  <NFormItem label="题目名称">
+                    <NInput v-model:value="exerciseModel.name" />
+                  </NFormItem>
+                  <NFormItem label="题目描述">
+                    <NInput v-model:value="exerciseModel.content" type="textarea" />
+                  </NFormItem>
+                  <NFormItem label="测试用例（JSON格式）">
+                    <NInput v-model:value="exerciseModel.cases" type="textarea" />
+                  </NFormItem>
+                  <NFormItem label="正确答案">
+                    <NInput v-model:value="exerciseModel.answer" type="textarea" />
+                  </NFormItem>
+                </NForm>
+                <NFlex justify="center"><NButton @click="updateExercise">提交</NButton></NFlex>
+              </NDrawerContent>
+            </NDrawer>
+          </template>
+          <NCode :code="exercise.content" />
+        </NCard>
+      </template>
+      <template #2>
+        <NSplit direction="vertical" :default-size="0.7">
+          <template #1>
+            <NCard class="h-full" size="small" :bordered="false">
+              <VueMonacoEditor
+                v-model:value="code"
+                v-model:language="language"
+                :options="MONACO_EDITOR_OPTIONS"
+                @mount="handleMount"
+              />
+            </NCard>
+          </template>
+          <template #2>
+            <NCard class="h-full overflow-auto" size="small" :bordered="false">
+              <NTabs v-model:value="tab">
+                <NTabPane name="测试用例" size="small">
+                  <NInput v-model:value="input" type="textarea" />
+                  <NFlex justify="center" class="mt-1 w-full">
+                    <NButton @click="clear">重置</NButton>
+                    <NButton type="primary" @click="run">运行</NButton>
+                    <NButton type="success" @click="submit">提交</NButton>
+                  </NFlex>
+                </NTabPane>
+                <NTabPane name="测试结果" size="small">
+                  <NFlex v-if="['CE', 'RE', 'WA'].includes(result?.code)" vertical>
+                    <NTag type="error">{{ result?.message }}</NTag>
+                    <NCode :code="result?.stderr" class="text-red" />
+                  </NFlex>
+                  <NFlex v-else-if="['AC'].includes(result?.code)" vertical>
+                    <NTag type="success">{{ result?.message }}</NTag>
+                  </NFlex>
+                  <NFlex v-else-if="['TEST'].includes(result?.code)" vertical>
+                    <NTag>{{ result?.message }}</NTag>
+                    <NCode v-if="result?.outputs.join()" :code="result?.outputs.join()" />
+                  </NFlex>
+                  <NEmpty v-else />
+                </NTabPane>
+              </NTabs>
+            </NCard>
+          </template>
+        </NSplit>
+      </template>
+    </NSplit>
+  </div>
 </template>
