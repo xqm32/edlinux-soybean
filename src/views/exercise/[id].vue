@@ -36,6 +36,13 @@ async function run() {
   tab.value = '测试结果';
 }
 
+const records = ref();
+async function initRecords() {
+  records.value = await pb
+    .collection('records')
+    .getFullList({ filter: `exerciseId="${props.id}" && studentId="${pb.authStore.model!.id}"` });
+}
+
 const exercise = ref();
 const exerciseModel = ref({
   name: '',
@@ -54,6 +61,14 @@ async function submit() {
     cases: JSON.parse(exercise.value.cases)
   });
   tab.value = '测试结果';
+  if (records.value.length === 0 && result.value.code === 'AC') {
+    await pb.collection('records').create({
+      exerciseId: props.id,
+      studentId: pb.authStore.model!.id,
+      code: code.value
+    });
+    await initRecords();
+  }
 }
 
 const [active, activate] = useActive();
@@ -70,7 +85,7 @@ async function deleteExercise() {
 }
 
 onBeforeMount(async () => {
-  await Promise.all([initExercise()]);
+  await Promise.all([initExercise(), initRecords()]);
 });
 </script>
 
@@ -79,8 +94,9 @@ onBeforeMount(async () => {
     <NSplit direction="horizontal" :default-size="0.3">
       <template #1>
         <NCard v-if="exercise" class="h-full" size="small" :bordered="false" :title="exercise.name">
-          <template v-if="isTeacher" #header-extra>
-            <NButton @click="activate">编辑习题</NButton>
+          <template #header-extra>
+            <NTag v-if="records && records.length > 0" type="success">已完成</NTag>
+            <NButton v-if="isTeacher" @click="activate">编辑习题</NButton>
             <NDrawer v-model:show="active" default-width="50%" resizable placement="right">
               <NDrawerContent title="编辑习题">
                 <NForm>

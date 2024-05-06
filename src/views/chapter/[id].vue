@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, shallowRef } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
 import 'vue-pdf-embed/dist/style/index.css';
 import 'vue-pdf-embed/dist/style/annotationLayer.css';
@@ -55,10 +55,13 @@ async function deleteChapterContent() {
 }
 
 const exercises = ref();
+const records = shallowRef();
+const finishedExercises = computed(() => new Set(exercises.value.map((item: any) => item.id)));
 const initExercises = async () => {
   exercises.value = await pb
     .collection('exercises')
     .getFullList({ filter: `chapterId="${props.id}"`, sort: 'created' });
+  records.value = await pb.collection('records').getFullList({ filter: `studentId="${pb.authStore.model!.id}"` });
 };
 
 const attachments = ref();
@@ -200,7 +203,10 @@ onBeforeMount(async () => {
           <div v-if="exercises">
             <div v-for="exercise in exercises" :key="exercise.id" class="mb-2">
               <NButton text>
-                <NTag type="success" class="mr-2">习题</NTag>
+                <NTag type="success" class="mr-2">
+                  习题
+                  <span v-if="finishedExercises.has(exercise.id)">&check;</span>
+                </NTag>
                 <RouterLink :to="`/exercise/${exercise.id}`">{{ exercise.name }}</RouterLink>
               </NButton>
             </div>
