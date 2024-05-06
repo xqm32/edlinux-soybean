@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 import { useRouterPush } from '@/hooks/common/router';
 
@@ -12,6 +12,16 @@ const initCourses = async () => {
 };
 
 const [active, activate] = useActive();
+const courseModel = reactive({
+  name: '',
+  description: '',
+  teacherId: pb.authStore.model!.id
+});
+async function createCourse() {
+  await pb.collection('courses').create(courseModel);
+  initCourses();
+  active.value = false;
+}
 
 onBeforeMount(async () => {
   await Promise.all([initCourses()]);
@@ -31,10 +41,13 @@ onBeforeMount(async () => {
             <NDrawerContent title="创建课程">
               <NForm>
                 <NFormItem label="课程标题">
-                  <NInput />
+                  <NInput v-model:value="courseModel.name" />
+                </NFormItem>
+                <NFormItem label="课程描述">
+                  <NInput v-model:value="courseModel.description" type="textarea" />
                 </NFormItem>
               </NForm>
-              <NFlex justify="center"><NButton>创建</NButton></NFlex>
+              <NFlex justify="center"><NButton @click="createCourse">创建</NButton></NFlex>
             </NDrawerContent>
           </NDrawer>
         </NCard>
