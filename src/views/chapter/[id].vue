@@ -162,7 +162,7 @@ onBeforeMount(async () => {
                 </NForm>
               </NDrawerContent>
             </NDrawer>
-            <NButton class="ml-2" @click="activateExercise">创建习题</NButton>
+            <NButton v-if="isTeacher" class="ml-2" @click="activateExercise">创建习题</NButton>
             <NDrawer v-model:show="activeExercise" default-width="50%" resizable placement="right">
               <NDrawerContent title="编辑习题">
                 <NForm>

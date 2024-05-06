@@ -126,7 +126,7 @@ onBeforeMount(async () => {
                       <NInputNumber v-model:value="chapterModel.order" class="w-full" />
                     </NFormItem>
                   </NForm>
-                  <NFlex justify="center"><NButton @click="createChapter">创建</NButton></NFlex>
+                  <NFlex justify="center"><NButton @click="createChapter">提交</NButton></NFlex>
                 </NDrawerContent>
               </NDrawer>
             </div>
