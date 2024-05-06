@@ -2,8 +2,10 @@
 import { onBeforeMount, ref, shallowRef } from 'vue';
 import { runCode } from '@/service/api';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
+import { useRouterPush } from '@/hooks/common/router';
 
-const { pb } = useEdLinux();
+const { pb, isTeacher } = useEdLinux();
+const { routerPush } = useRouterPush();
 const props = defineProps<{ id: string }>();
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
@@ -61,6 +63,11 @@ async function updateExercise() {
   active.value = false;
   window.$message!.success('更新成功');
 }
+async function deleteExercise() {
+  await pb.collection('exercises').delete(props.id);
+  window.$message!.success('删除成功');
+  await routerPush(`/chapter/${exercise.value.chapterId}`);
+}
 
 onBeforeMount(async () => {
   await Promise.all([initExercise()]);
@@ -72,7 +79,7 @@ onBeforeMount(async () => {
     <NSplit direction="horizontal" :default-size="0.3">
       <template #1>
         <NCard v-if="exercise" class="h-full" size="small" :bordered="false" :title="exercise.name">
-          <template v-if="pb.authStore.model!.roles.includes('R_TEACHER')" #header-extra>
+          <template v-if="isTeacher" #header-extra>
             <NButton @click="activate">编辑习题</NButton>
             <NDrawer v-model:show="active" default-width="50%" resizable placement="right">
               <NDrawerContent title="编辑习题">
@@ -93,6 +100,7 @@ onBeforeMount(async () => {
                 <NFlex justify="center"><NButton @click="updateExercise">提交</NButton></NFlex>
               </NDrawerContent>
             </NDrawer>
+            <NButton v-if="isTeacher" class="ml-2" type="error" @click="deleteExercise">删除习题</NButton>
           </template>
           <NCode :code="exercise.content" />
         </NCard>

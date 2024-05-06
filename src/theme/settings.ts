@@ -2,35 +2,13 @@
 export const themeSettings: App.Theme.ThemeSetting = {
   themeScheme: 'light',
   themeColor: '#646cff',
-  otherColor: {
-    info: '#2080f0',
-    success: '#52c41a',
-    warning: '#faad14',
-    error: '#f5222d'
-  },
+  otherColor: { info: '#2080f0', success: '#52c41a', warning: '#faad14', error: '#f5222d' },
   isInfoFollowPrimary: true,
-  layout: {
-    mode: 'vertical',
-    scrollMode: 'content'
-  },
-  page: {
-    animate: true,
-    animateMode: 'fade-slide'
-  },
-  header: {
-    height: 56,
-    breadcrumb: {
-      visible: true,
-      showIcon: true
-    }
-  },
-  tab: {
-    visible: true,
-    cache: true,
-    height: 44,
-    mode: 'chrome'
-  },
-  fixedHeaderAndTab: true,
+  layout: { mode: 'horizontal', scrollMode: 'wrapper' },
+  page: { animate: false, animateMode: 'fade-slide' },
+  header: { height: 56, breadcrumb: { visible: false, showIcon: true } },
+  tab: { visible: false, cache: true, height: 44, mode: 'chrome' },
+  fixedHeaderAndTab: false,
   sider: {
     inverted: false,
     width: 220,
@@ -39,12 +17,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
     mixCollapsedWidth: 64,
     mixChildMenuWidth: 200
   },
-  footer: {
-    visible: true,
-    fixed: false,
-    height: 48,
-    right: true
-  }
+  footer: { visible: false, fixed: false, height: 48, right: true }
 };
 
 /**
