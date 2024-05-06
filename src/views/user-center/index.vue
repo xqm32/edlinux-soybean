@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useEdLinux } from '@/hooks/common/edlinux';
 
 const { pb } = useEdLinux();
-const user = ref();
-
-onMounted(async () => {
-  user.value = await pb.collection('users').getOne(pb.authStore.model!.id);
+const userModel = ref({
+  name: pb.authStore.model!.name,
+  number: pb.authStore.model!.number,
+  class: pb.authStore.model!.class
 });
+async function updateUser() {
+  await pb.collection('users').update(pb.authStore.model!.id, userModel.value);
+  userModel.value = await pb.collection('users').getOne(pb.authStore.model!.id);
+  window.$message!.success('修改成功');
+}
 </script>
 
 <template>
@@ -15,15 +20,15 @@ onMounted(async () => {
     <NCard>
       <NForm class="w-sm">
         <NFormItem label="姓名">
-          <NInput :value="pb.authStore.model!.name" />
+          <NInput v-model:value="userModel.name" />
         </NFormItem>
         <NFormItem label="学号/工号">
-          <NInput :value="pb.authStore.model!.number" />
+          <NInput v-model:value="userModel.number" />
         </NFormItem>
         <NFormItem label="班级">
-          <NInput :value="pb.authStore.model!.class" />
+          <NInput v-model:value="userModel.class" />
         </NFormItem>
-        <NButton>修改</NButton>
+        <NButton @click="updateUser">修改</NButton>
       </NForm>
     </NCard>
   </div>
