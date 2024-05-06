@@ -15,11 +15,16 @@ onMounted(async () => {
 
 <template>
   <div v-if="wikis">
-    <NList bordered>
-      <NListItem v-for="wiki in wikis" :key="wiki.id">
-        <NButton tag="a" :href="wiki.content" text>{{ wiki.name }}</NButton>
-      </NListItem>
-    </NList>
+    <NGrid :cols="10">
+      <NGridItem :span="7">
+        <NCard title="知识库">
+          <div v-for="wiki in wikis" :key="wiki.id">
+            <NButton tag="a" :href="wiki.content" text>{{ wiki.name }}</NButton>
+          </div>
+        </NCard>
+      </NGridItem>
+      <NGridItem :span="3"><NCard title="管理"></NCard></NGridItem>
+    </NGrid>
   </div>
 </template>
 
