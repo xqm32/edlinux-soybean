@@ -72,20 +72,20 @@ onBeforeMount(async () => {
         <NCard v-if="exercise" class="h-full" size="small" :bordered="false" :title="exercise.name">
           <template v-if="pb.authStore.model!.roles.includes('R_TEACHER')" #header-extra>
             <NButton @click="activate">编辑习题</NButton>
-            <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
+            <NDrawer v-model:show="active" default-width="50%" resizable placement="right">
               <NDrawerContent title="编辑习题">
                 <NForm>
                   <NFormItem label="题目名称">
                     <NInput v-model:value="exerciseModel.name" />
                   </NFormItem>
                   <NFormItem label="题目描述">
-                    <NInput v-model:value="exerciseModel.content" type="textarea" />
+                    <NInput v-model:value="exerciseModel.content" type="textarea" class="font-mono" :rows="8" />
                   </NFormItem>
                   <NFormItem label="测试用例（JSON格式）">
-                    <NInput v-model:value="exerciseModel.cases" type="textarea" />
+                    <NInput v-model:value="exerciseModel.cases" type="textarea" class="font-mono" :rows="8" />
                   </NFormItem>
                   <NFormItem label="正确答案">
-                    <NInput v-model:value="exerciseModel.answer" type="textarea" />
+                    <NInput v-model:value="exerciseModel.answer" type="textarea" class="font-mono" :rows="8" />
                   </NFormItem>
                 </NForm>
                 <NFlex justify="center"><NButton @click="updateExercise">提交</NButton></NFlex>
