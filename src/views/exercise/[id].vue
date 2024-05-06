@@ -100,7 +100,10 @@ onBeforeMount(async () => {
                 <NFlex justify="center"><NButton @click="updateExercise">提交</NButton></NFlex>
               </NDrawerContent>
             </NDrawer>
-            <NButton v-if="isTeacher" class="ml-2" type="error" @click="deleteExercise">删除习题</NButton>
+            <NPopconfirm v-if="isTeacher" @positive-click="deleteExercise">
+              <template #trigger><NButton type="error" class="ml-2">删除习题</NButton></template>
+              确认删除习题？
+            </NPopconfirm>
           </template>
           <NCode :code="exercise.content" />
         </NCard>

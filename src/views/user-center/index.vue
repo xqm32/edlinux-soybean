@@ -2,7 +2,7 @@
 import { onBeforeMount, ref } from 'vue';
 import { useEdLinux } from '@/hooks/common/edlinux';
 
-const { pb } = useEdLinux();
+const { pb, isStudent } = useEdLinux();
 const getAvatarUrl = (model: any) => pb.getFileUrl(model, model.avatar, { download: true });
 
 const userModel = ref();
@@ -37,7 +37,7 @@ onBeforeMount(async () => {
         <NFormItem label="学号/工号">
           <NInput v-model:value="userModel.number" />
         </NFormItem>
-        <NFormItem label="班级">
+        <NFormItem v-if="isStudent" label="班级">
           <NInput v-model:value="userModel.class" />
         </NFormItem>
         <NButton @click="updateUser">修改</NButton>
