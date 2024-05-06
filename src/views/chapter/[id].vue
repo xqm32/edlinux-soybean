@@ -57,7 +57,7 @@ onBeforeMount(async () => {
           <template #header-extra>
             <NButton v-if="isTeacher">管理资源</NButton>
           </template>
-          <div class="mb-2">
+          <div v-if="chapter.content" class="mb-2">
             <NButton tag="a" :href="getFileUrl(chapter)" text>
               <NTag type="primary" class="mr-2">课件</NTag>
               {{ chapter.content }}
