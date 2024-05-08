@@ -1,7 +1,7 @@
 /** Default theme settings */
 export const themeSettings: App.Theme.ThemeSetting = {
   themeScheme: 'light',
-  themeColor: '#646cff',
+  themeColor: '#3b82f6',
   otherColor: { info: '#2080f0', success: '#52c41a', warning: '#faad14', error: '#f5222d' },
   isInfoFollowPrimary: true,
   layout: { mode: 'horizontal', scrollMode: 'wrapper' },
