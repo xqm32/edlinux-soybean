@@ -54,6 +54,7 @@ const headerMenus = computed(() => {
       <GlobalBreadcrumb v-if="!appStore.isMobile" class="ml-12px" />
     </div>
     <div class="h-full flex-y-center justify-end">
+      <ThemeButton />
       <UserAvatar />
     </div>
   </DarkModeContainer>
