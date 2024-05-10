@@ -8,7 +8,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
   page: { animate: false, animateMode: 'fade-slide' },
   header: { height: 56, breadcrumb: { visible: false, showIcon: true } },
   tab: { visible: false, cache: true, height: 44, mode: 'chrome' },
-  fixedHeaderAndTab: false,
+  fixedHeaderAndTab: true,
   sider: {
     inverted: false,
     width: 220,
