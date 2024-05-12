@@ -10,7 +10,7 @@ const props = defineProps<{ id: string }>();
 const chapters = ref();
 const chapterModel = ref({
   name: '',
-  order: 0,
+  order: 1,
   courseId: props.id
 });
 const [active, activate] = useActive();
