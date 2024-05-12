@@ -56,7 +56,7 @@ async function deleteChapterContent() {
 
 const exercises = ref();
 const records = shallowRef([]);
-const finishedExercises = computed(() => new Set(records.value.map((item: any) => item.id)));
+const finishedExercises = computed(() => new Set(records.value.map((item: any) => item.exerciseId)));
 const initExercises = async () => {
   exercises.value = await pb
     .collection('exercises')
