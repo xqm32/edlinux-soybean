@@ -36,7 +36,7 @@ async function run() {
   tab.value = '测试结果';
 }
 
-const records = ref();
+const records = shallowRef([]);
 async function initRecords() {
   records.value = await pb
     .collection('records')
