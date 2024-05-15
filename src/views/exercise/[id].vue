@@ -4,7 +4,7 @@ import { runCode } from '@/service/api';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 import { useRouterPush } from '@/hooks/common/router';
 
-const { pb, isTeacher } = useEdLinux();
+const { pb, isTeacher, isStudent } = useEdLinux();
 const { routerPush } = useRouterPush();
 const props = defineProps<{ id: string }>();
 const MONACO_EDITOR_OPTIONS = {
@@ -95,7 +95,7 @@ onBeforeMount(async () => {
       <template #1>
         <NCard v-if="exercise" class="h-full" size="small" :bordered="false" :title="exercise.name">
           <template #header-extra>
-            <NTag v-if="records && records.length > 0" type="success">已完成</NTag>
+            <NTag v-if="records && records.length > 0 && isStudent" type="success">已完成</NTag>
             <NButton v-if="isTeacher" @click="activate">编辑习题</NButton>
             <NDrawer v-model:show="active" default-width="50%" resizable placement="right">
               <NDrawerContent title="编辑习题">

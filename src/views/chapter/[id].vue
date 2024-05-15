@@ -149,7 +149,7 @@ onBeforeMount(async () => {
           <template #header-extra>
             <NButton v-if="isTeacher" @click="activate">管理资源</NButton>
             <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
-              <NDrawerContent title="创建课程">
+              <NDrawerContent title="管理资源">
                 <NForm>
                   <NUpload
                     v-model:file-list="chapterContent"
