@@ -7,7 +7,7 @@ import 'vue-pdf-embed/dist/style/textLayer.css';
 import { useActive, useEdLinux } from '@/hooks/common/edlinux';
 import { useRouterPush } from '@/hooks/common/router';
 
-const { pb, isTeacher } = useEdLinux();
+const { pb, isTeacher, isStudent } = useEdLinux();
 const { routerPush } = useRouterPush();
 const props = defineProps<{ id: string }>();
 const getFileUrl = (attachment: any) => pb.getFileUrl(attachment, attachment.content, { download: true });
@@ -205,7 +205,7 @@ onBeforeMount(async () => {
               <NButton text>
                 <NTag type="success" class="mr-2">
                   习题
-                  <span v-if="finishedExercises.has(exercise.id)">&check;</span>
+                  <span v-if="isStudent && finishedExercises.has(exercise.id)">&check;</span>
                 </NTag>
                 <RouterLink :to="`/exercise/${exercise.id}`">{{ exercise.name }}</RouterLink>
               </NButton>
