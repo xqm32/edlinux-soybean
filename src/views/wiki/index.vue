@@ -38,7 +38,7 @@ onBeforeMount(async () => {
   <div>
     <NCard title="知识库">
       <template #header-extra>
-        <NButton @click="activate">添加文档</NButton>
+        <NButton v-if="isTeacher" @click="activate">添加文档</NButton>
         <NDrawer v-model:show="active" default-width="33%" resizable placement="right">
           <NDrawerContent title="添加">
             <NForm>
