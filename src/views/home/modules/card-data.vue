@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
-import { $t } from '@/locales';
+import { useEdLinux } from '@/hooks/common/edlinux';
 
 defineOptions({
   name: 'CardData'
@@ -19,50 +19,51 @@ interface CardData {
   icon: string;
 }
 
+const { isTeacher } = useEdLinux();
 const cardData = computed<CardData[]>(() => [
   {
     key: 'visitCount',
-    title: $t('page.home.visitCount'),
-    value: 9725,
+    title: isTeacher ? '我的教学' : '我的课程',
+    value: 1,
     unit: '',
     color: {
       start: '#ec4786',
       end: '#b955a4'
     },
-    icon: 'ant-design:bar-chart-outlined'
+    icon: isTeacher ? 'mdi:work-outline' : 'mdi:school-outline'
   },
   {
     key: 'turnover',
-    title: $t('page.home.turnover'),
-    value: 1026,
-    unit: '$',
+    title: '所有课程',
+    value: 4,
+    unit: '',
     color: {
       start: '#865ec0',
       end: '#5144b4'
     },
-    icon: 'ant-design:money-collect-outlined'
+    icon: 'mdi:library-shelves'
   },
   {
-    key: 'downloadCount',
-    title: $t('page.home.downloadCount'),
-    value: 970925,
+    key: 'downloadCoun',
+    title: '教师人数',
+    value: 2,
     unit: '',
     color: {
       start: '#56cdf3',
       end: '#719de3'
     },
-    icon: 'carbon:document-download'
+    icon: 'mdi:account-tie'
   },
   {
     key: 'dealCount',
-    title: $t('page.home.dealCount'),
-    value: 9527,
+    title: '学生人数',
+    value: 10,
     unit: '',
     color: {
       start: '#fcbc25',
       end: '#f68057'
     },
-    icon: 'ant-design:trademark-circle-outlined'
+    icon: 'mdi:account-group'
   }
 ]);
 
